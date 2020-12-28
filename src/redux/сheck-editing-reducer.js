@@ -4,6 +4,7 @@ import {DataEditingAPI} from "../api/api";
 
 const CREATE_DATA_CHECK = 'CREATE_DATA_CHECK';
 const IMG_DATA = 'IMG_DATA';
+const TEXT_DATA = 'TEXT_DATA';
 
 
 debugger;
@@ -11,7 +12,7 @@ let initialState = {
     check: [],
     results: [],
     tree: [],
-    //result: []
+    data: []
 }
 
 const checkEditingReducer = (state = initialState, action) => {
@@ -23,6 +24,9 @@ const checkEditingReducer = (state = initialState, action) => {
         case IMG_DATA: {
             return { ...state,  results: action.results/*[11241].files*/ }
         }
+        case TEXT_DATA: {
+            return { ...state,  ...action.data/*[11241].files*/ }
+        }
         default:
             return state;
     }
@@ -30,6 +34,7 @@ const checkEditingReducer = (state = initialState, action) => {
 
 export const setCreateDataCheckEditing = (check, results, tree) => ({type: CREATE_DATA_CHECK, check, results, tree})
 export const setImgDataCheckEditing = (results) => ({type: IMG_DATA, results})
+export const setTextDataCheckEditing = (data) => ({type: TEXT_DATA, data})
 
 debugger;
 export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
@@ -59,6 +64,19 @@ export const getFilesThunkEditingAPI = (formDataImg, itemId, checkId) => {
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
             dispatch(setImgDataCheckEditing(response));
+            debugger;
+        });
+    }
+}
+
+export const getTextThunkEditingAPI = (value, itemId, checkId) => {
+    return (dispatch) => {
+        debugger;
+        DataEditingAPI.AddText(value, itemId, checkId).then(response => {
+            //console.log(response.data);
+            debugger;
+            //dispatch(setCreateDataCheckEditing(response.data));
+            dispatch(setTextDataCheckEditing(response));
             debugger;
         });
     }

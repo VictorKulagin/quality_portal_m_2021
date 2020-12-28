@@ -20,13 +20,41 @@ import * as ImagePicker from 'expo-image-picker';
 
 const CheckEditing = (props) => {
 
-    console.log(props);
+
+    function EnterText() {
+        debugger;
+        /*if (props.results[props.route.params.itemId].text !== undefined) {
+            return (
+                <>
+                    <View>
+                        <Text>{props.results[props.route.params.itemId].text.text}</Text>
+                    </View>
+                </>
+            )
+        }*/
+        if (props.data.result === "success") {
+            return (
+                <>
+                    <View>
+                        <Text>{ (props.route.params.itemId === props.data.item_id ) ? props.data.model.text : []}</Text>
+                    </View>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <View>
+                        <Text>{(props.results[props.route.params.itemId].text) ? props.results[props.route.params.itemId].text.text : []}</Text>
+                    </View>
+                </>
+            )
+        }
+
+        return null;
+    }
 
 
-
-debugger;
-    function GetTreeItems()
-    {
+    function GetTreeItems() {
         //const bs = React.createRef();
         const bs = React.useRef(null);
         const fall = new Animated.Value(1);
@@ -99,7 +127,7 @@ debugger;
             return {
                 pickImageChoose: props.navigation.navigate('Редактировать проверку', {
                     // formDataImg: result.uri,
-                    formDataImg:  { uri: localUri, name: filename, type },
+                    formDataImg: {uri: localUri, name: filename, type},
                     itemId: props.route.params.itemId,
                     checkId: props.route.params.checkId
                 })
@@ -162,10 +190,12 @@ debugger;
                         <Text style={styles.panelTitle}>Загрузить фото</Text>
                         <Text style={styles.panelSubtitle}>Выберете фотографии</Text>
                     </View>
-                    <TouchableOpacity style={styles.panelButton} /*onPress={takePhotoFromCamera}*/ onPress={pickImageAllow}>
+                    <TouchableOpacity style={styles.panelButton} /*onPress={takePhotoFromCamera}*/
+                                      onPress={pickImageAllow}>
                         <Text style={styles.panelButtonTitle}>Сфотографировать</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} /*onPress={choosePhotoFromLibrary}*/ onPress={pickImage }>
+                    <TouchableOpacity style={styles.panelButton} /*onPress={choosePhotoFromLibrary}*/
+                                      onPress={pickImage}>
                         <Text style={styles.panelButtonTitle}>Галерея</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.panelButton} onPress={() => bs.current.snapTo(1)}>
@@ -209,64 +239,79 @@ debugger;
                                                 callbackNode={fall}
                                                 enabledGestureInteraction={true}
                                             />
-                                            <Animated.View style={{margin: 20,
+                                            <Animated.View style={{
+                                                margin: 20,
                                                 opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
                                             }}>
-                                            <View style={{alignContent: 'center'}}>
-                                                <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
-                                                    <View style={{
-                                                        height: 200,
-                                                        width: 260,
-                                                        borderRadius: 15,
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                    }}>
-                                                        <ImageBackground
-                                                            source={{
-                                                                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'
-                                                            }}
-                                                            style={{height: 100, width: 100}}
-                                                            imageStyle={{borderRadius: 15}}
-                                                        >
-                                                            <View style={{
-                                                                flex: 1,
-                                                                justifyContent: 'center',
-                                                                alignItems: 'center'
-                                                            }}>
-                                                                <Icon name="camera" size={35} color="#fff" style={{
-                                                                    opacity: 0.7,
-                                                                    alignItems: 'center',
+                                                <View style={{alignContent: 'center'}}>
+                                                    <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
+                                                        <View style={{
+                                                            height: 200,
+                                                            width: 260,
+                                                            borderRadius: 15,
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                        }}>
+                                                            <ImageBackground
+                                                                source={{
+                                                                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'
+                                                                }}
+                                                                style={{height: 100, width: 100}}
+                                                                imageStyle={{borderRadius: 15}}
+                                                            >
+                                                                <View style={{
+                                                                    flex: 1,
                                                                     justifyContent: 'center',
-                                                                    borderWidth: 1,
-                                                                    borderColor: '#fff',
-                                                                    borderRadius: 10,
-                                                                }}/>
-                                                            </View>
-                                                        </ImageBackground>
-                                                    </View>
-                                                </TouchableOpacity>
-                                            </View>
-                                            <Text>
-                                                {value2.name}
-                                            </Text>
-                                            <View style={styles.action}>
-                                                <FontAwesome name="edit" size={35}/>
-                                                <TextInput
-                                                    style={[styles.TextInput, {}]}
-                                                    placeholder='(Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9)'
-                                                    placeholderTextColor="#666666"
-                                                    autoCorrect={false}
-                                                    onChange={HandleInputChange}
-                                                />
-                                            </View>
+                                                                    alignItems: 'center'
+                                                                }}>
+                                                                    <Icon name="camera" size={35} color="#fff" style={{
+                                                                        opacity: 0.7,
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'center',
+                                                                        borderWidth: 1,
+                                                                        borderColor: '#fff',
+                                                                        borderRadius: 10,
+                                                                    }}/>
+                                                                </View>
+                                                            </ImageBackground>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <Text>
+                                                    {value2.name}
+                                                </Text>
+                                                <View style={styles.action}>
+                                                    <FontAwesome name="edit" size={35}/>
+                                                    <TextInput
+                                                        style={[styles.TextInput, {}]}
+                                                        placeholder='(Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9)'
+                                                        placeholderTextColor="#666666"
+                                                        autoCorrect={false}
+                                                        onChange={HandleInputChange}
+                                                    />
+                                                </View>
+                                                <EnterText/>
+                                                <View>
+                                                    {/*<Text>{'value'}{' : '}{valueText}{'/'}{'itemId'}{' : '}{value2.id}{'/'}{'checkId'}{' : '}{props.check.id}</Text>*/}
+                                                    {/*props.results.data.model.text*/}
+                                                </View>
 
-                                            <TouchableOpacity style={styles.commandButton}>
-                                                <Text>Submit</Text>
-                                            </TouchableOpacity>
+
+
+                                                <TouchableOpacity style={styles.commandButton}
+                                                                  onPress={() => props.navigation.navigate('Редактировать проверку', {
+                                                                      value: valueText,
+                                                                      itemId: value2.id,
+                                                                      checkId: props.check.id,
+
+                                                                      //parentId: props.route.params.parentId
+                                                                  })}
+                                                >
+                                                    <Text style={{color: '#ffffff'}}>Отправить</Text>
+                                                </TouchableOpacity>
                                             </Animated.View>
                                         </View>
                                         : []}
-
                                 </>
                             )
                         }) : []}
@@ -276,7 +321,6 @@ debugger;
         }
         return null
     }
-
 
 
     return (
@@ -316,7 +360,7 @@ const styles = StyleSheet.create({
     commandButton: {
         padding: 15,
         borderRadius: 10,
-        backgroundColor: '#FF6347',
+        backgroundColor: '#eb2d93',
         alignItems: 'center',
         marginTop: 10,
     },

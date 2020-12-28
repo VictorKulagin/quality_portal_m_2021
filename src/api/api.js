@@ -86,10 +86,11 @@ export const ViewCheckHistoryAPI = {
     DeleteViewCheckHistory(checkIdView) {
         debugger;
         return instance.delete(`api/check/delete?check_id=${checkIdView}&access-token=`+ config.accessTocken);
-    }
+    },
 }
 
 debugger;
+//DataEditingAPI.AddText = { ...CreateCheckAPI.AddText }
 export const  DataEditingAPI = {
     AddFile(formDataImg, itemId, checkId){
 
@@ -122,5 +123,9 @@ export const  DataEditingAPI = {
             .catch(function () {
                 console.log('FAILURE!!');
             });*/
-    }
+    },
+
+    AddText (value, itemId, checkId){
+        return instance.post("api/results/add-text?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
+    },
 }

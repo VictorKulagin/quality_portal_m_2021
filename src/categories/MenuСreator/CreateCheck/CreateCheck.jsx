@@ -16,15 +16,26 @@ const CreateCheck = (props) => {
     console.log("--------");
     console.log(props.text);
     console.log("--------");
-
-
+debugger;
+    function GetTreeText({id}){
+            if (props.results !== undefined) {
+                    return (
+                        <>
+                            <View >
+                                <Text >{(props.results[id].text) ? props.results[id].text.text : []}</Text>
+                            </View>
+                        </>
+                    )
+            }
+            return null
+    }
 
 function GetTreeItems()
     {
         if (props.tree.children !== undefined) {
-            const [valueText, setText] = useState('');
+            //const [valueText, setText] = useState('');
 
-            const HandleInputChange = event => setText(event.nativeEvent.text);
+            //const HandleInputChange = event => setText(event.nativeEvent.text);
 
             ///console.log(props.data);
 
@@ -45,30 +56,27 @@ function GetTreeItems()
 
                                     <View key={index2}>
 
-                                        <TextInput
+                                        {/*<TextInput
                                             style={styles.input}
                                             placeholder = '(Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9)'
                                             onChange={HandleInputChange}
-                                         />
-                                        {/*<Text>{(props.results[value2.id].text) ? props.results[value2.id].text.text : ''}</Text>
-                                        <Text>{props.check.id} {valueText} {value2.id}</Text>*/}
+                                         />*/}
 
-                                        <TouchableOpacity
-                                            //style={styles.button}
+                                        {/*<TouchableOpacity
                                             onPress={() => props.navigation.navigate('Создать проверку', {
                                                 value: valueText,
                                                 itemId: value2.id,
                                                 checkId: props.check.id,
-
                                                 parentId: props.route.params.parentId
                                             })}
-                                        >
-                                            <MaterialIcons
+                                        >*/}
+                                            {/*<MaterialIcons
                                                 name="check"
                                                 color="green"
                                                 size={25}
-                                            />
-                                        </TouchableOpacity>
+                                            />*/}
+                                        {/*</TouchableOpacity>*/}
+                                        <GetTreeText id={value2.id}/>
                                     </View>
                                     <TouchableRipple style={styles.dataTableCell}>
                                         <View>
