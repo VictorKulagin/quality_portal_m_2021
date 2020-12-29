@@ -4,7 +4,7 @@ import { YellowBox } from 'react-native'
 import CheckEditing from "./CheckEditing";
 import {connect} from "react-redux"
 import {
-    getCheckThunkCreatorEdition, getFilesThunkEditingAPI
+    getCheckThunkCreatorEdition, getFilesThunkEditingAPI, getTextThunkEditingAPI
 } from "../../../../redux/сheck-editing-reducer";
 
 
@@ -31,6 +31,15 @@ const CheckEditingContainer = (props) => {
         }
     }, [props.route.params?.formDataImg, props.route.params?.itemId, props.route.params?.checkId]);
 
+    useEffect(() => {
+        debugger;
+        if(props.route.params?.value && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
+            debugger;
+            props.getTextThunkEditingAPI(props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId);
+            //console.log(props.route.params?.formDataImg)
+        }
+    }, [props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId]);
+
     return <CheckEditing {...props} />
 
 };
@@ -41,12 +50,13 @@ let mapStateToProps = (state) => {
         check: state.checkEditingReducer.check,
         results: state.checkEditingReducer.results,
         tree: state.checkEditingReducer.tree,
+        data: state.checkEditingReducer.data,
         //result: state.checkEditingReducer.result
     }
 }
 
 
 export default connect(mapStateToProps, {
-    getCheckThunkCreatorEdition, getFilesThunkEditingAPI
+    getCheckThunkCreatorEdition, getFilesThunkEditingAPI, getTextThunkEditingAPI
 })(CheckEditingContainer);
 

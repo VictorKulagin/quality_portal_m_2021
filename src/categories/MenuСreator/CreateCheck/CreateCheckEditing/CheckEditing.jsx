@@ -20,8 +20,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 const CheckEditing = (props) => {
 
-
-    function EnterText() {
+    debugger;
+    function EnterText () {
         debugger;
         /*if (props.results[props.route.params.itemId].text !== undefined) {
             return (
@@ -32,11 +32,11 @@ const CheckEditing = (props) => {
                 </>
             )
         }*/
-        if (props.data.result === "success") {
+        if (props.data.result === "success" && props.data.model.item_id === props.route.params.itemId) {
             return (
                 <>
                     <View>
-                        <Text>{ (props.route.params.itemId === props.data.item_id ) ? props.data.model.text : []}</Text>
+                        <Text>{ props.data.model.text }</Text>
                     </View>
                 </>
             )
