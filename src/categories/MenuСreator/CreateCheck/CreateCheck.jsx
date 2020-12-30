@@ -1,13 +1,31 @@
 import React, {useState} from 'react'
-import {TouchableOpacity, ScrollView, Modal, TouchableHighlight, View, Text, TextInput, StyleSheet, Button, SafeAreaView, FlatList, Alert, SectionList, VirtualizedList} from "react-native";
+import {
+    TouchableOpacity,
+    ScrollView,
+    Modal,
+    TouchableHighlight,
+    View,
+    Text,
+    TextInput,
+    StyleSheet,
+    Button,
+    SafeAreaView,
+    FlatList,
+    Alert,
+    SectionList,
+    VirtualizedList,
+    ImageBackground
+} from "react-native";
 //import ScrollView from "react-native-web";
 import { DataTable } from 'react-native-paper';
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/TouchableRipple";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {LinearGradient} from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 //import TextInput from "react-native-web/dist/exports/TextInput";
 import RenderInnerCamera from "../../../common/RenderInnerCamera";
 import CheckEditing from "./CreateCheckEditing/CheckEditing";
+import Animated from "react-native-reanimated";
 //import TextInput from "react-native-web";
 
 const CreateCheck = (props) => {
@@ -80,13 +98,29 @@ function GetTreeItems()
                                     </View>
                                     <TouchableRipple style={styles.dataTableCell}>
                                         <View>
-                                            <Text>Фото</Text>
-                                            <Text onPress={() => props.navigation.navigate('Редактировать проверку', {
+                                            {/*<Text>Фото</Text>*/}
+
+                                            <Icon name="camera" size={35} color="#000"
+                                            style={{
+                                                 opacity: 0.7,
+                                                 alignItems: 'center',
+                                                 justifyContent: 'center',
+                                                 borderWidth: 1,
+                                                 borderColor: '#000',
+                                                 borderRadius: 10,
+                                            }}
+                                            onPress={() => props.navigation.navigate('Редактировать проверку', {
                                                 itemId: value2.id,
                                                 checkId: props.check.id,
                                                 parentId: props.route.params.parentId
-                                            })}>Редактировать</Text>
-                                            <Text>{value2.id} {props.check.id} {props.route.params.parentId}</Text>
+                                            })}/>
+
+                                            {/*<Text onPress={() => props.navigation.navigate('Редактировать проверку', {
+                                                itemId: value2.id,
+                                                checkId: props.check.id,
+                                                parentId: props.route.params.parentId
+                                            })}>Редактировать</Text>*/}
+                                            {/*<Text>{value2.id} {props.check.id} {props.route.params.parentId}</Text>*/}
                                         </View>
                                     </TouchableRipple>
 
