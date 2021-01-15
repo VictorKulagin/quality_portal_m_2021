@@ -5,6 +5,7 @@ import {DataEditingAPI} from "../api/api";
 const CREATE_DATA_CHECK = 'CREATE_DATA_CHECK';
 const IMG_DATA = 'IMG_DATA';
 const TEXT_DATA = 'TEXT_DATA';
+const COEFFICIENT_CHANGE = 'COEFFICIENT_CHANGE';
 
 
 debugger;
@@ -27,6 +28,9 @@ const checkEditingReducer = (state = initialState, action) => {
         case TEXT_DATA: {
             return { ...state,  ...action.data/*[11241].files*/ }
         }
+        case COEFFICIENT_CHANGE: {
+            return { ...state,  ...action.data/*[11241].files*/ }
+        }
         default:
             return state;
     }
@@ -35,6 +39,7 @@ const checkEditingReducer = (state = initialState, action) => {
 export const setCreateDataCheckEditing = (check, results, tree) => ({type: CREATE_DATA_CHECK, check, results, tree})
 export const setImgDataCheckEditing = (results) => ({type: IMG_DATA, results})
 export const setTextDataCheckEditing = (data) => ({type: TEXT_DATA, data})
+export const setCoefficientChangeCheckEditing = (data) => ({type: COEFFICIENT_CHANGE, data})
 
 debugger;
 export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
@@ -56,10 +61,10 @@ export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
     }
 }
 
-export const getFilesThunkEditingAPI = (formDataImg, itemId, checkId) => {
+export const getFilesThunkEditingAPI = (formData/*, itemId, checkId*/) => {
     return (dispatch) => {
         debugger;
-        DataEditingAPI.AddFile(formDataImg, itemId, checkId).then(response => {
+        DataEditingAPI.AddFile(formData/*, itemId, checkId*/).then(response => {
             //console.log(response.data);
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
@@ -77,6 +82,19 @@ export const getTextThunkEditingAPI = (value, itemId, checkId) => {
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
             dispatch(setTextDataCheckEditing(response));
+            debugger;
+        });
+    }
+}
+
+export const getCoefficientThunkEditingAPI = (value, itemId, checkId) => {
+    return (dispatch) => {
+        debugger;
+        DataEditingAPI.ChangeCoefficient(value, itemId, checkId).then(response => {
+            //console.log(response.data);
+            debugger;
+            //dispatch(setCreateDataCheckEditing(response.data));
+            dispatch(setCoefficientChangeCheckEditing(response));
             debugger;
         });
     }

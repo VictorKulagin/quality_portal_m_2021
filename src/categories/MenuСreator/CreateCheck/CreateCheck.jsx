@@ -1,4 +1,9 @@
 import React, {useState} from 'react'
+
+//import '../../../common/grid.css'; //Import here your file style
+
+import { FlatGrid, SectionGrid } from 'react-native-super-grid';
+
 import {
     TouchableOpacity,
     ScrollView,
@@ -14,12 +19,15 @@ import {
     Alert,
     SectionList,
     VirtualizedList,
-    ImageBackground
+    ImageBackground,
+    Dimensions
 } from "react-native";
 //import ScrollView from "react-native-web";
 import { DataTable } from 'react-native-paper';
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/TouchableRipple";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 import {LinearGradient} from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 //import TextInput from "react-native-web/dist/exports/TextInput";
@@ -35,11 +43,14 @@ const CreateCheck = (props) => {
     console.log(props.text);
     console.log("--------");
 debugger;
+
+
+
     function GetTreeText({id}){
             if (props.results !== undefined) {
                     return (
                         <>
-                            <View >
+                            <View style={{width: OptionCellComment}}>
                                 <Text >{(props.results[id].text) ? props.results[id].text.text : []}</Text>
                             </View>
                         </>
@@ -68,38 +79,15 @@ function GetTreeItems()
                         {(value.name !== undefined) ? value.children.map((value2, index2) => {
                             return (
                                 <DataTable.Row key={index2} style={styles.dataTableRow}>
-                                    <TouchableRipple style={[styles.dataTableCell, {flexGrow: 3}]}>
-                                        <Text style={{ /*flexGrow: 1*/}}>{value2.name} {/*(props.model !== null && props.model.item_id == value2.id ) ? props.model.text : ""*/}</Text>
+                                    <TouchableRipple style={{width: OptionCellDescription}}>
+                                        <Text style={{ /*flexGrow: 1*/  }}> {value2.name} {/*(props.model !== null && props.model.item_id == value2.id ) ? props.model.text : ""*/}</Text>
                                     </TouchableRipple>
 
                                     <View key={index2}>
-
-                                        {/*<TextInput
-                                            style={styles.input}
-                                            placeholder = '(Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9)'
-                                            onChange={HandleInputChange}
-                                         />*/}
-
-                                        {/*<TouchableOpacity
-                                            onPress={() => props.navigation.navigate('Создать проверку', {
-                                                value: valueText,
-                                                itemId: value2.id,
-                                                checkId: props.check.id,
-                                                parentId: props.route.params.parentId
-                                            })}
-                                        >*/}
-                                            {/*<MaterialIcons
-                                                name="check"
-                                                color="green"
-                                                size={25}
-                                            />*/}
-                                        {/*</TouchableOpacity>*/}
                                         <GetTreeText id={value2.id}/>
                                     </View>
-                                    <TouchableRipple style={styles.dataTableCell}>
+                                    <TouchableRipple style={{width: CameraCellDescription, justifyContent: 'center'}}>
                                         <View>
-                                            {/*<Text>Фото</Text>*/}
-
                                             <Icon name="camera" size={35} color="#000"
                                             style={{
                                                  opacity: 0.7,
@@ -124,8 +112,8 @@ function GetTreeItems()
                                         </View>
                                     </TouchableRipple>
 
-                                    <TouchableRipple style={styles.dataTableCell}>
-                                        <Text>1</Text>
+                                    <TouchableRipple style={{ width: CoefficientCellDescription, justifyContent: 'center' }} >
+                                        <Text style={{ textAlign: 'center'}}>1</Text>
                                     </TouchableRipple>
                                 </DataTable.Row>
                             )
@@ -137,6 +125,16 @@ function GetTreeItems()
         return null
     }
 
+
+        const padding = 10;
+        const deviceWidth = Dimensions.get('window').width;
+        const OptionCellDescription = (deviceWidth / 2) - (padding * 4);
+        const OptionCellComment = (deviceWidth / 2.2) - (padding * 4);
+        const CameraCellDescription = (deviceWidth / 13.1) - (padding * 4);
+        const CoefficientCellDescription = (deviceWidth / 10) - (padding * 4);
+
+        console.log(OptionCellDescription);
+        console.log(CameraCellDescription);
 
     return (
         <View style={styles.container}>
@@ -190,9 +188,7 @@ function GetTreeItems()
             </SafeAreaView>
         </View>
     )
-    // const name = props.tree.name
 }
-
 
 const styles = StyleSheet.create({
     h1: {
@@ -201,8 +197,8 @@ const styles = StyleSheet.create({
     },
     container: {
         //marginTop: StatusBar.currentHeight || 0,
-        padding: 5,
-        marginBottom: 40
+        //padding: 5,
+        //marginBottom: 40
     },
     signIn: {
         backgroundColor: '#ffedad',
@@ -230,18 +226,38 @@ const styles = StyleSheet.create({
         height: 10
     },
     dataTableRow: {
-        paddingHorizontal: 0,
+        //paddingHorizontal: 0,
+        //width: CreateCheck.deviceWidth
+        flex: 1,
+        flexDirection: 'row'
     },
-    dataTableCell: {
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-
+    dataTableCellDescription: {
+        //paddingHorizontal: 16,
+        //paddingVertical: 10,
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
-
-        justifyContent: 'flex-end',
-
+        width: CreateCheck.OptionCellDescription
+        //width: (Dimensions.get('window').width / 8) - (10 * 4)
+        //alignItems: 'flex-start',
+        //justifyContent: 'flex-end',
+    },
+    dataTableCellComment: {
+        //paddingHorizontal: 16,
+        //paddingVertical: 10,
+        flex: 1,
+        flexDirection: 'row',
+        width: CreateCheck.OptionCellComment
+        //alignItems: 'flex-start',
+        //justifyContent: 'flex-end',
+    },
+    dataTableCellPhoto: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        flex: 1,
+        flexDirection: 'row',
+        width: CreateCheck.OptionCellComment
+        //alignItems: 'flex-start',
+        //justifyContent: 'flex-end',
     },
     dataTableCellText: {
         // whiteSpace: 'pre-wrap'
@@ -328,6 +344,30 @@ const styles = StyleSheet.create({
     /*modalContent: {
         flex: 1,
     }*/
+
+
+    gridView: {
+        marginTop: 10,
+        flex: 1,
+    },
+    itemContainer: {
+        justifyContent: 'flex-end',
+        borderRadius: 5,
+        padding: 10,
+        height: 100,
+    },
+    itemName: {
+        fontSize: 16,
+        color: '#fff',
+        fontWeight: '600',
+    },
+    itemCode: {
+        fontWeight: '600',
+        fontSize: 12,
+        color: '#fff',
+    }
+
+
 });
 
 export default CreateCheck;

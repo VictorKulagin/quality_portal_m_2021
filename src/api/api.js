@@ -92,16 +92,16 @@ export const ViewCheckHistoryAPI = {
 debugger;
 //DataEditingAPI.AddText = { ...CreateCheckAPI.AddText }
 export const  DataEditingAPI = {
-    AddFile(formDataImg, itemId, checkId){
+    AddFile(formData, itemId, checkId){
 
 
-        console.log({formDataImg, itemId, checkId});
-        debugger;
-        const formData = new FormData();
-        console.log({formDataImg});
-        formData.append('file', formDataImg);
-        formData.append('itemId', itemId);
-        formData.append('checkId', checkId);
+        console.log({formData/*, itemId, checkId*/});
+        // debugger;
+        // const formData = new FormData();
+        // console.log({formDataImg});
+        // formData.append('file', formDataImg);
+        // formData.append('itemId', itemId);
+        // formData.append('checkId', checkId);
 
         // axios({
         //     url: 'http://localhost:5000/api/hello',
@@ -128,4 +128,8 @@ export const  DataEditingAPI = {
     AddText (value, itemId, checkId){
         return instance.post("api/results/add-text?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
     },
+
+    ChangeCoefficient (value, itemId, checkId) {
+        return instance.post("api/results/add-coefficient?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId });
+    }
 }

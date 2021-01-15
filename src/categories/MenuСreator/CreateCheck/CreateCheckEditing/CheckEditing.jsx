@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Text, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, ScrollView} from "react-native";
+import {View, Text, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, ScrollView, Platform, Picker, Alert, Button } from "react-native";
 import {StyleSheet} from "react-native";
 import {DataTable} from "react-native-paper";
 
@@ -11,12 +11,16 @@ import TouchableRipple from "react-native-paper/src/components/TouchableRipple/T
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//import ReactNativePickerModule from "react-native-picker-module"
+
 
 //import ImagePicker from 'react-native-image-crop-picker';
 
 //import styles from "react-native-webview/lib/WebView.styles";
 //import { ImageBrowser } from 'expo-image-picker-multiple';
 import * as ImagePicker from 'expo-image-picker';
+//import ReactNativePickerModule from "react-native-picker-module";
+
 
 const CheckEditing = (props) => {
 
@@ -32,30 +36,82 @@ const CheckEditing = (props) => {
                 </>
             )
         }*/
-        if (props.data.result === "success" && props.data.model.item_id === props.route.params.itemId) {
-            return (
-                <>
-                    <View>
-                        <Text>{ props.data.model.text }</Text>
-                    </View>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <View>
-                        <Text>{(props.results[props.route.params.itemId].text) ? props.results[props.route.params.itemId].text.text : []}</Text>
-                    </View>
-                </>
-            )
+        if(props.data.model === "null"){
+            if (props.data.result === "success" && props.data.model.item_id === props.route.params.itemId) {
+                return (
+                    <>
+                        <View>
+                            <Text>{ props.data.model.text }</Text>
+                        </View>
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <View>
+                            <Text>{(props.results[props.route.params.itemId].text != "undefined") ? props.results[props.route.params.itemId].text.text : []}</Text>
+                        </View>
+                    </>
+                )
+            }
         }
+
 
         return null;
     }
 
 
+    debugger;
+    function EnterCoefficient () {
+        debugger;
+        const [selectedValue, setSelectedValue] = useState("1");
+
+        const pickerActivity = (itemValue) =>{
+            setSelectedValue(itemValue)
+            alert(itemValue)
+        }
+
+        return (
+            <View style={styles.container}>
+                <Picker
+                    selectedValue={selectedValue}
+                    style={{ height: 50, width: 150 }}
+                    onValueChange={
+                        (itemValue, itemIndex) => pickerActivity(itemValue)
+
+                    }
+                >
+                    <Picker.Item label="0.5" value="0.5" />
+                    <Picker.Item label="0.55" value="0.55" />
+                    <Picker.Item label="0.6" value="0.6" />
+                    <Picker.Item label="0.65" value="0.65" />
+                    <Picker.Item label="0.7" value="0.7" />
+                    <Picker.Item label="0.75" value="0.75" />
+                    <Picker.Item label="0.8" value="0.8" />
+                    <Picker.Item label="0.85" value="0.85" />
+                    <Picker.Item label="0.9" value="0.9" />
+                    <Picker.Item label="0.95" value="0.95" />
+                    <Picker.Item label="1" value="1" />
+                    <Picker.Item label="1.1" value="1.1" />
+                    <Picker.Item label="1.2" value="1.2" />
+                    <Picker.Item label="1.3" value="1.3" />
+                    <Picker.Item label="1.4" value="1.4" />
+                    <Picker.Item label="1.5" value="1.5" />
+                    <Picker.Item label="1.6" value="1.6" />
+                    <Picker.Item label="1.7" value="1.7" />
+                    <Picker.Item label="1.8" value="1.8" />
+                    <Picker.Item label="1.9" value="1.9" />
+                    <Picker.Item label="2" value="2" />
+                </Picker>
+            </View>
+        );
+
+        return null;
+    }
+
     function GetTreeItems() {
         //const bs = React.createRef();
+
         const bs = React.useRef(null);
         const fall = new Animated.Value(1);
 
@@ -73,11 +129,12 @@ const CheckEditing = (props) => {
                 base64: true
             });
 
-            let localUri = result.uri;
-            let filename = localUri.split('/').pop();
-
-            let match = /\.(\w+)$/.exec(filename);
-            let type = match ? `image/${match[1]}` : `image`;
+            //let localUri = result.uri;
+            let base64 = result.uri;
+            // let filename = base64.split('/').pop();
+            //
+            // let match = /\.(\w+)$/.exec(filename);
+            // let type = match ? `image/${match[1]}` : `image`;
 
             // function dataURItoBlob(dataURI) {
             //     if(typeof dataURI !== 'string'){
@@ -123,15 +180,83 @@ const CheckEditing = (props) => {
 
             // console.log(result);
 
+            function base64ToFile(base64, name)
+            {
+                mime = mime || '';
+                var arr = base64.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1];
+
+                base64 = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+
+                console.log({mime});
+
+                const sliceSize = 1024;
+                const byteChars = window.atob(base64);
+                const byteArrays = [];
+
+                for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+                    const slice = byteChars.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i++) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+
+                    byteArrays.push(byteArray);
+                }
+
+                return new File(byteArrays, name,  {type: mime});
+                // return new Blob(byteArrays, {type: mime});
+                // return byteArrays;
+            }
+
+            function dataURLtoFile(dataurl, filename) {
+
+                var arr = dataurl.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+
+                console.log({arr});
+
+                while(n--){
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+
+                return new File([u8arr], filename, {type:mime});
+            }
+
+            const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+
+            console.log({base64});
+            console.log({base64ImageContent});
+
+            const file = base64ToFile(base64, '1.jpeg');
+            // const file = dataURLtoFile(base64, '1.jpg');
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('itemId', props.route.params.itemId);
+            formData.append('checkId', props.route.params.checkId);
 
             return {
                 pickImageChoose: props.navigation.navigate('Редактировать проверку', {
-                    // formDataImg: result.uri,
-                    formDataImg: {uri: localUri, name: filename, type},
-                    itemId: props.route.params.itemId,
-                    checkId: props.route.params.checkId
+                    formData
                 })
             };
+
+            // return {
+            //     pickImageChoose: props.navigation.navigate('Редактировать проверку', {
+            //         // formDataImg: result.uri,
+            //         //formDataImg: {uri: localUri, name: filename, type},
+            //         formDataImg: {uri: base64ToBlob, name: filename, type},
+            //         itemId: props.route.params.itemId,
+            //         checkId: props.route.params.checkId
+            //     })
+            // };
 
             /*if (!result.cancelled) {
                 setImage(result.uri);
@@ -295,7 +420,9 @@ const CheckEditing = (props) => {
                                                     {/*<Text>{'value'}{' : '}{valueText}{'/'}{'itemId'}{' : '}{value2.id}{'/'}{'checkId'}{' : '}{props.check.id}</Text>*/}
                                                     {/*props.results.data.model.text*/}
                                                 </View>
-
+                                                <View style={{ margin: 40 }}>
+                                                    <EnterCoefficient/>
+                                                </View>
 
 
                                                 <TouchableOpacity style={styles.commandButton}
