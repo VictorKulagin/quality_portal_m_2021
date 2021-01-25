@@ -13,7 +13,8 @@ let initialState = {
     check: [],
     results: [],
     tree: [],
-    data: []
+    data: [],
+    config: []
 }
 
 const checkEditingReducer = (state = initialState, action) => {
@@ -24,12 +25,19 @@ const checkEditingReducer = (state = initialState, action) => {
         }
         case IMG_DATA: {
             return { ...state,  results: action.results/*[11241].files*/ }
-        }
+    }
         case TEXT_DATA: {
-            return { ...state,  ...action.data/*[11241].files*/ }
+
+            let newResults = state.results;
+            let item_id = action.results.data.model.item_id;
+            let item_results = {...newResults[item_id], text: action.results.data.model};
+
+            newResults = {...newResults, [item_id]: item_results}
+
+            return { ...state,  results: newResults/*[11241].files*/ }
         }
         case COEFFICIENT_CHANGE: {
-            return { ...state,  ...action.data/*[11241].files*/ }
+            return { ...state,  ...action.config/*[11241].files*/ }
         }
         default:
             return state;
@@ -38,8 +46,8 @@ const checkEditingReducer = (state = initialState, action) => {
 
 export const setCreateDataCheckEditing = (check, results, tree) => ({type: CREATE_DATA_CHECK, check, results, tree})
 export const setImgDataCheckEditing = (results) => ({type: IMG_DATA, results})
-export const setTextDataCheckEditing = (data) => ({type: TEXT_DATA, data})
-export const setCoefficientChangeCheckEditing = (data) => ({type: COEFFICIENT_CHANGE, data})
+export const setTextDataCheckEditing = (results) => ({type: TEXT_DATA, results})
+export const setCoefficientChangeCheckEditing = (config) => ({type: COEFFICIENT_CHANGE, config})
 
 debugger;
 export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
@@ -68,6 +76,9 @@ export const getFilesThunkEditingAPI = (formData/*, itemId, checkId*/) => {
             //console.log(response.data);
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
+
+
+
             dispatch(setImgDataCheckEditing(response));
             debugger;
         });
@@ -75,9 +86,17 @@ export const getFilesThunkEditingAPI = (formData/*, itemId, checkId*/) => {
 }
 
 export const getTextThunkEditingAPI = (value, itemId, checkId) => {
+    console.log('before return');
+
     return (dispatch) => {
         debugger;
+        console.log('before send');
+
         DataEditingAPI.AddText(value, itemId, checkId).then(response => {
+
+            //
+            // console.log(initialState);
+            // console.log({data: response.data});
             //console.log(response.data);
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
@@ -87,14 +106,15 @@ export const getTextThunkEditingAPI = (value, itemId, checkId) => {
     }
 }
 
-export const getCoefficientThunkEditingAPI = (value, itemId, checkId) => {
+export const getCoefficientThunkEditingAPI = (value, itemId, checkId) =>  {
     return (dispatch) => {
         debugger;
+
         DataEditingAPI.ChangeCoefficient(value, itemId, checkId).then(response => {
             //console.log(response.data);
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
-            dispatch(setCoefficientChangeCheckEditing(response));
+            //dispatch(setCoefficientChangeCheckEditing(response.config));
             debugger;
         });
     }

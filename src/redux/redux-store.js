@@ -4,7 +4,7 @@ import _categoriesReducer from "./categories-reduserss";
 import subCategoriesReducer from "./sub-categories-reducer";
 import menuCreatorReducer from "./menu-creator-reducer";
 import thirdCategoriesReducer from "./third-category-reducer";
-import createCheckReducer from "./сreate-сheck-reducer";
+import createCheckReducer from "./create-check-reducer";
 import setLoadScreenAuthReducer from "./load-screen-reducer"
 import viewCheckHistoryReducer from "./view-check-history-reducer"
 //import { composeWithDevToos } from 'react-native-view-shot';
@@ -15,7 +15,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 
 
 import thunkMiddleware from "redux-thunk";
-import checkEditingReducer from "./сheck-editing-reducer";
+import checkEditingReducer from "./check-editing-reducer";
 
 
 

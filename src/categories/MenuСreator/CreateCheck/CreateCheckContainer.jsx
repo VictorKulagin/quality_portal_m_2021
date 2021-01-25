@@ -5,7 +5,7 @@ import {
     getCreateCheckThunkCreator,
     getViewCreateCheckThunkCreatorText, getViewCreateCheckThunkHistoryText,
     getViewHistoryCheckThunkShow
-} from "../../../redux/сreate-сheck-reducer";
+} from "../../../redux/create-check-reducer";
 
 {/*Убираеm WAR Recycle cykle*/}
 import { YellowBox } from 'react-native'

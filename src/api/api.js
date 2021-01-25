@@ -129,7 +129,7 @@ export const  DataEditingAPI = {
         return instance.post("api/results/add-text?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
     },
 
-    ChangeCoefficient (value, itemId, checkId) {
-        return instance.post("api/results/add-coefficient?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId });
+    async ChangeCoefficient (value, itemId, checkId) {
+        return await instance.post("api/results/add-coefficient?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId });
     }
 }

@@ -5,46 +5,20 @@ import React, {useState} from 'react'
 import { FlatGrid, SectionGrid } from 'react-native-super-grid';
 
 import {
-    TouchableOpacity,
     ScrollView,
-    Modal,
-    TouchableHighlight,
     View,
     Text,
-    TextInput,
     StyleSheet,
-    Button,
     SafeAreaView,
-    FlatList,
-    Alert,
-    SectionList,
-    VirtualizedList,
-    ImageBackground,
     Dimensions
 } from "react-native";
-//import ScrollView from "react-native-web";
+
 import { DataTable } from 'react-native-paper';
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/TouchableRipple";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-import {LinearGradient} from "expo-linear-gradient";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-//import TextInput from "react-native-web/dist/exports/TextInput";
-import RenderInnerCamera from "../../../common/RenderInnerCamera";
-import CheckEditing from "./CreateCheckEditing/CheckEditing";
-import Animated from "react-native-reanimated";
-//import TextInput from "react-native-web";
-
 const CreateCheck = (props) => {
-
-    console.log(props.results);
-    console.log("--------");
-    console.log(props.text);
-    console.log("--------");
-debugger;
-
-
 
     function GetTreeText({id}){
             if (props.results !== undefined) {
@@ -63,9 +37,7 @@ function GetTreeItems()
     {
         if (props.tree.children !== undefined) {
             //const [valueText, setText] = useState('');
-
             //const HandleInputChange = event => setText(event.nativeEvent.text);
-
             ///console.log(props.data);
 
             return props.tree.children.map((value, index) => {
@@ -78,7 +50,7 @@ function GetTreeItems()
                         </DataTable.Header>
                         {(value.name !== undefined) ? value.children.map((value2, index2) => {
                             return (
-                                <DataTable.Row key={index2} style={styles.dataTableRow}>
+                                <DataTable.Row style={styles.dataTableRow}>
                                     <TouchableRipple style={{width: OptionCellDescription}}>
                                         <Text style={{ /*flexGrow: 1*/  }}> {value2.name} {/*(props.model !== null && props.model.item_id == value2.id ) ? props.model.text : ""*/}</Text>
                                     </TouchableRipple>
@@ -103,12 +75,6 @@ function GetTreeItems()
                                                 parentId: props.route.params.parentId
                                             })}/>
 
-                                            {/*<Text onPress={() => props.navigation.navigate('Редактировать проверку', {
-                                                itemId: value2.id,
-                                                checkId: props.check.id,
-                                                parentId: props.route.params.parentId
-                                            })}>Редактировать</Text>*/}
-                                            {/*<Text>{value2.id} {props.check.id} {props.route.params.parentId}</Text>*/}
                                         </View>
                                     </TouchableRipple>
 

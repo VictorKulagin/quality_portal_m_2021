@@ -5,7 +5,7 @@ import CheckEditing from "./CheckEditing";
 import {connect} from "react-redux"
 import {
     getCheckThunkCreatorEdition, getCoefficientThunkEditingAPI, getFilesThunkEditingAPI, getTextThunkEditingAPI
-} from "../../../../redux/сheck-editing-reducer";
+} from "../../../../redux/check-editing-reducer";
 
 
 YellowBox.ignoreWarnings([
@@ -32,6 +32,7 @@ const CheckEditingContainer = (props) => {
     }, [props.route.params?.formData/*, props.route.params?.itemId, props.route.params?.checkId*/]);
 
     useEffect(() => {
+        console.log('useEffect getTextThunkEditingAPI')
         debugger;
         if(props.route.params?.value && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
             debugger;
@@ -49,6 +50,8 @@ const CheckEditingContainer = (props) => {
         }
     }, [props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId]);
 
+    console.log(props);
+    debugger
     return <CheckEditing {...props} />
 
 };
@@ -60,6 +63,7 @@ let mapStateToProps = (state) => {
         results: state.checkEditingReducer.results,
         tree: state.checkEditingReducer.tree,
         data: state.checkEditingReducer.data,
+        config: state.checkEditingReducer.config
         //result: state.checkEditingReducer.result
     }
 }

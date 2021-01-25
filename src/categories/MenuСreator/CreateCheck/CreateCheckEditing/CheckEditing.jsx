@@ -12,7 +12,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import ReactNativePickerModule from "react-native-picker-module"
-
+import  EnterText from '../CreateCheckEditing/Common/EnterText'
 
 //import ImagePicker from 'react-native-image-crop-picker';
 
@@ -24,41 +24,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 const CheckEditing = (props) => {
 
-    debugger;
-    function EnterText () {
-        debugger;
-        /*if (props.results[props.route.params.itemId].text !== undefined) {
-            return (
-                <>
-                    <View>
-                        <Text>{props.results[props.route.params.itemId].text.text}</Text>
-                    </View>
-                </>
-            )
-        }*/
-        if(props.data.model === "null"){
-            if (props.data.result === "success" && props.data.model.item_id === props.route.params.itemId) {
-                return (
-                    <>
-                        <View>
-                            <Text>{ props.data.model.text }</Text>
-                        </View>
-                    </>
-                )
-            } else {
-                return (
-                    <>
-                        <View>
-                            <Text>{(props.results[props.route.params.itemId].text != "undefined") ? props.results[props.route.params.itemId].text.text : []}</Text>
-                        </View>
-                    </>
-                )
-            }
-        }
 
-
-        return null;
-    }
 
 
     debugger;
@@ -66,9 +32,14 @@ const CheckEditing = (props) => {
         debugger;
         const [selectedValue, setSelectedValue] = useState("1");
 
-        const pickerActivity = (itemValue) =>{
-            setSelectedValue(itemValue)
-            alert(itemValue)
+        const pickerActivity = (selectedValue) =>{
+            setSelectedValue(selectedValue)
+            alert(selectedValue);
+            props.navigation.navigate('Редактировать проверку', {
+                value: selectedValue,
+                itemId: props.route.params.itemId,
+                checkId: props.route.params.checkId
+            })
         }
 
         return (
@@ -76,10 +47,7 @@ const CheckEditing = (props) => {
                 <Picker
                     selectedValue={selectedValue}
                     style={{ height: 50, width: 150 }}
-                    onValueChange={
-                        (itemValue, itemIndex) => pickerActivity(itemValue)
-
-                    }
+                    onValueChange={(itemValue, itemIndex) => pickerActivity(itemValue)}
                 >
                     <Picker.Item label="0.5" value="0.5" />
                     <Picker.Item label="0.55" value="0.55" />
@@ -108,6 +76,11 @@ const CheckEditing = (props) => {
 
         return null;
     }
+
+
+
+
+
 
     function GetTreeItems() {
         //const bs = React.createRef();
@@ -402,7 +375,7 @@ const CheckEditing = (props) => {
                                                         </View>
                                                     </TouchableOpacity>
                                                 </View>
-                                                <Text>
+                                                {/*<Text>
                                                     {value2.name}
                                                 </Text>
                                                 <View style={styles.action}>
@@ -413,29 +386,19 @@ const CheckEditing = (props) => {
                                                         placeholderTextColor="#666666"
                                                         autoCorrect={false}
                                                         onChange={HandleInputChange}
-                                                    />
-                                                </View>
-                                                <EnterText/>
+                                                    />*/}
+
+                                                <EnterText {...props}/>
                                                 <View>
                                                     {/*<Text>{'value'}{' : '}{valueText}{'/'}{'itemId'}{' : '}{value2.id}{'/'}{'checkId'}{' : '}{props.check.id}</Text>*/}
                                                     {/*props.results.data.model.text*/}
                                                 </View>
                                                 <View style={{ margin: 40 }}>
                                                     <EnterCoefficient/>
+                                                    <Text>1111</Text>
                                                 </View>
 
 
-                                                <TouchableOpacity style={styles.commandButton}
-                                                                  onPress={() => props.navigation.navigate('Редактировать проверку', {
-                                                                      value: valueText,
-                                                                      itemId: value2.id,
-                                                                      checkId: props.check.id,
-
-                                                                      //parentId: props.route.params.parentId
-                                                                  })}
-                                                >
-                                                    <Text style={{color: '#ffffff'}}>Отправить</Text>
-                                                </TouchableOpacity>
                                             </Animated.View>
                                         </View>
                                         : []}
