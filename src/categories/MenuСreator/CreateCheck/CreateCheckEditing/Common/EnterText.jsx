@@ -11,42 +11,32 @@ import TouchableRipple from "react-native-paper/src/components/TouchableRipple/T
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-//import ReactNativePickerModule from "react-native-picker-module"
-
-
-//import ImagePicker from 'react-native-image-crop-picker';
-
-//import styles from "react-native-webview/lib/WebView.styles";
-//import { ImageBrowser } from 'expo-image-picker-multiple';
 import * as ImagePicker from 'expo-image-picker';
-//import ReactNativePickerModule from "react-native-picker-module";
-    const UselessTextInput = (props) => {
-        return (
-            <TextInput
-                {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
-                editable
-                maxLength={400}
-            />
-        );
-    }
 
+const UselessTextInput = (props) => {
+    return (
+         <TextInput
+             {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
+             editable
+             maxLength={400}
+         />
+    );
+}
 
 const EnterText = (props) => {
             debugger;
             console.log(props);
-            const [value, onChangeText] = React.useState((props.results[props.route.params.itemId].text) ? AbraCadabra() :  AbraCadabra2() );
+            const [valueText, onChangeText] = React.useState(Notes);
 
-            function AbraCadabra(){
-              return (props.results[props.route.params.itemId].text) ? props.results[props.route.params.itemId].text.text : 'Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9'
+            function Notes(){
+                debugger;
+                return (props.results[props.route.params.itemId].text) ? props.results[props.route.params.itemId].text.text : []
             }
-debugger;
-            function AbraCadabra2(){
-                 return (props.data.model && props.data.model.item_id === props.route.params.itemId ) ? props.data.model.text : "Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9"
-            }
+
             return (
                 <View
                     style={{
-                        backgroundColor: value,
+                        /*backgroundColor: value,*/
                         borderBottomColor: '#000000',
                         borderBottomWidth: 1,
                     }}>
@@ -54,13 +44,14 @@ debugger;
                         multiline
                         numberOfLines={4}
                         onChangeText={text => onChangeText(text)}
-                        value={value}
+                        value={valueText}
+                        placeholder='Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9'
                     />
 
                     <TouchableOpacity style={styles.commandButton}
                                       onPress={
                                           () => props.navigation.push('Редактировать проверку', {
-                                              value: value,
+                                              valueText: valueText,
                                               itemId: props.route.params.itemId,
                                               checkId: props.route.params.checkId,
                                               //parentId: props.route.params.parentId
@@ -125,12 +116,6 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#FFFFFF',
         paddingTop: 20,
-        // borderTopLeftRadius: 20,
-        // borderTopRightRadius: 20,
-        // shadowColor: '#000000',
-        // shadowOffset: {width: 0, height: 0},
-        // shadowRadius: 5,
-        // shadowOpacity: 0.4,
     },
     panelTitle: {
         fontSize: 27,
@@ -163,6 +148,5 @@ const styles = StyleSheet.create({
       }
 
 })
-
 
 export default EnterText;

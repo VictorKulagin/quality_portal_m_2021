@@ -27,7 +27,7 @@ const checkEditingReducer = (state = initialState, action) => {
             return { ...state,  results: action.results/*[11241].files*/ }
     }
         case TEXT_DATA: {
-
+debugger;
             let newResults = state.results;
             let item_id = action.results.data.model.item_id;
             let item_results = {...newResults[item_id], text: action.results.data.model};
@@ -37,7 +37,37 @@ const checkEditingReducer = (state = initialState, action) => {
             return { ...state,  results: newResults/*[11241].files*/ }
         }
         case COEFFICIENT_CHANGE: {
-            return { ...state,  ...action.config/*[11241].files*/ }
+            debugger;
+            let newResults = state.results;
+            let item_id = JSON.parse(action.results.config.data);
+            let item_results = {...newResults[item_id.itemId], coefficient: action.results.data.model};
+
+            newResults = {...newResults, [item_id.itemId]: item_results}
+
+            return { ...state,  results: newResults/*[11241].files*/ }
+
+            //console.log(item_id.itemId + " SSS");
+
+            //console.log(typeof(newResults));
+            /*newResults = JSON.parse(newResults);
+            console.log(typeof(newResults));*/
+            //let item_results_ = {...newResults[item_id.itemId]};
+
+
+
+            //console.log(item_results_.coefficient.value + " " + item_id.value + " SSS 0");
+
+            //item_results_.coefficient.value = item_id.value;
+
+            //let item_results = {...newResults[item_id.itemId]};
+
+            //console.log(JSON.stringify(item_results) + " SSS 1");
+
+            //newResults = {...newResults, [item_id.itemId]: item_results}
+
+            //console.log(JSON.stringify(newResults) + " SSS 2");
+
+            //return { ...state,  results: newResults/*[11241].files*/ }
         }
         default:
             return state;
@@ -47,7 +77,7 @@ const checkEditingReducer = (state = initialState, action) => {
 export const setCreateDataCheckEditing = (check, results, tree) => ({type: CREATE_DATA_CHECK, check, results, tree})
 export const setImgDataCheckEditing = (results) => ({type: IMG_DATA, results})
 export const setTextDataCheckEditing = (results) => ({type: TEXT_DATA, results})
-export const setCoefficientChangeCheckEditing = (config) => ({type: COEFFICIENT_CHANGE, config})
+export const setCoefficientChangeCheckEditing = (results) => ({type: COEFFICIENT_CHANGE, results})
 
 debugger;
 export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
@@ -85,14 +115,14 @@ export const getFilesThunkEditingAPI = (formData/*, itemId, checkId*/) => {
     }
 }
 
-export const getTextThunkEditingAPI = (value, itemId, checkId) => {
+export const getTextThunkEditingAPI = (valueText, itemId, checkId) => {
     console.log('before return');
 
     return (dispatch) => {
         debugger;
         console.log('before send');
 
-        DataEditingAPI.AddText(value, itemId, checkId).then(response => {
+        DataEditingAPI.AddText(valueText, itemId, checkId).then(response => {
 
             //
             // console.log(initialState);
@@ -106,15 +136,15 @@ export const getTextThunkEditingAPI = (value, itemId, checkId) => {
     }
 }
 
-export const getCoefficientThunkEditingAPI = (value, itemId, checkId) =>  {
+export const getCoefficientThunkEditingAPI = (selectedValue, itemId, checkId) =>  {
     return (dispatch) => {
         debugger;
 
-        DataEditingAPI.ChangeCoefficient(value, itemId, checkId).then(response => {
+        DataEditingAPI.ChangeCoefficient(selectedValue, itemId, checkId).then(response => {
             //console.log(response.data);
             debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
-            //dispatch(setCoefficientChangeCheckEditing(response.config));
+            dispatch(setCoefficientChangeCheckEditing(response));
             debugger;
         });
     }

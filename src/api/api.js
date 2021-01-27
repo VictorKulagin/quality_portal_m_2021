@@ -125,11 +125,11 @@ export const  DataEditingAPI = {
             });*/
     },
 
-    AddText (value, itemId, checkId){
-        return instance.post("api/results/add-text?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
+    AddText (valueText, itemId, checkId){
+        return instance.post("api/results/add-text?access-token="+ config.accessTocken, { value: valueText, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
     },
 
-    async ChangeCoefficient (value, itemId, checkId) {
-        return await instance.post("api/results/add-coefficient?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId });
+    async ChangeCoefficient (selectedValue, itemId, checkId) {
+        return await instance.post("api/results/add-coefficient?access-token="+ config.accessTocken, { value: selectedValue, itemId: itemId, checkId: checkId });
     }
 }

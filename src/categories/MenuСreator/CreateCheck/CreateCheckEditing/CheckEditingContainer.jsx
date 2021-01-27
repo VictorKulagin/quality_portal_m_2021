@@ -34,21 +34,21 @@ const CheckEditingContainer = (props) => {
     useEffect(() => {
         console.log('useEffect getTextThunkEditingAPI')
         debugger;
-        if(props.route.params?.value && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
+        if(props.route.params?.valueText && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
             debugger;
-            props.getTextThunkEditingAPI(props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId);
+            props.getTextThunkEditingAPI(props.route.params?.valueText, props.route.params?.itemId, props.route.params?.checkId);
             //console.log(props.route.params?.formDataImg)
         }
-    }, [props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId]);
+    }, [props.route.params?.valueText, props.route.params?.itemId, props.route.params?.checkId]);
 
     useEffect(() => {
         debugger;
-        if(props.route.params?.value && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
+        if(props.route.params?.selectedValue && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
             debugger;
-            props.getCoefficientThunkEditingAPI(props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId);
+            props.getCoefficientThunkEditingAPI(props.route.params?.selectedValue, props.route.params?.itemId, props.route.params?.checkId);
             //console.log(props.route.params?.formDataImg)
         }
-    }, [props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId]);
+    }, [props.route.params?.selectedValue, props.route.params?.itemId, props.route.params?.checkId]);
 
     console.log(props);
     debugger
