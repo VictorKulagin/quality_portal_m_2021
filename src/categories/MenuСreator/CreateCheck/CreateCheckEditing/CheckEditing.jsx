@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Text, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, ScrollView, Platform, Picker, Alert, Button } from "react-native";
+import {View, Image, Text, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, ScrollView, Dimensions, Platform, Picker, Alert, Button } from "react-native";
 import {StyleSheet} from "react-native";
 import {DataTable} from "react-native-paper";
 
@@ -11,19 +11,83 @@ import TouchableRipple from "react-native-paper/src/components/TouchableRipple/T
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-//import ReactNativePickerModule from "react-native-picker-module"
-import  EnterText from '../CreateCheckEditing/Common/EnterText'
+import  EnterComments from '../CreateCheckEditing/Common/EnterComments'
+
+
 
 //import ImagePicker from 'react-native-image-crop-picker';
 
 //import styles from "react-native-webview/lib/WebView.styles";
 //import { ImageBrowser } from 'expo-image-picker-multiple';
 import * as ImagePicker from 'expo-image-picker';
-import EnterCoefficient from "./Common/CheckEditing";
+import EnterCoefficient from "./Common/EnterCoefficient";
 //import ReactNativePickerModule from "react-native-picker-module";
+//import Gallery from 'react-native-gallery';
+
+
 
 
 const CheckEditing = (props) => {
+
+    const width = Dimensions.get('window').width;
+    const height = width * 100 / 180;
+
+    /*function Width() {
+        return Dimensions.get('window').width;
+    }
+
+    function Height() {
+        return width * 100 / 60;
+    }*/
+
+    console.log(width + " | " + height);
+
+    function EnterPictures() {
+        const [active, setActive] = useState(0);
+        console.log(active);
+        const change = ({nativeEvent}) => {
+            const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
+            if(slide !== active){
+                setActive(slide);
+            }
+        }
+        if(props.results !== undefined && props.results[props.route.params.itemId].files !== undefined)
+        {
+                return (
+                    <>
+                        <View >
+                            <ScrollView
+                                pagingEnabled
+                                horizontal
+                                onScroll={change}
+                                showsHorizontalScrollIndicator={false}
+                                style={[styles.scroll, { width: width, height: height }]}>
+                            {
+                                props.results[props.route.params.itemId].files.map((value, index) => (
+
+                                    <Image
+                                        key={index}
+                                        source={{uri: "http://109.73.14.239/upload/part1/" + value.file_name}}
+                                        style={[styles.image, { width: width, height: height }]}
+                                    />
+
+                                ))
+                            }
+                            </ScrollView>
+                            <View style={styles.pagination}>
+                                {
+                                    props.results[props.route.params.itemId].files.map((value, index) => (
+                                        <Text key={index} style={index === active ? styles.pagingActiveText : styles.pagingText}><Icon name="brightness-1" size={15}/></Text>
+                                    ))
+                                }
+                            </View>
+                        </View>
+                    </>
+                )
+        }
+    }
+
+
 
     function GetTreeItems() {
         //const bs = React.createRef();
@@ -96,8 +160,7 @@ const CheckEditing = (props) => {
 
             // console.log(result);
 
-            function base64ToFile(base64, name)
-            {
+            function base64ToFile(base64, name) {
                 mime = mime || '';
                 var arr = base64.split(','),
                     mime = arr[0].match(/:(.*?);/)[1];
@@ -123,7 +186,7 @@ const CheckEditing = (props) => {
                     byteArrays.push(byteArray);
                 }
 
-                return new File(byteArrays, name,  {type: mime});
+                return new File(byteArrays, name, {type: mime});
                 // return new Blob(byteArrays, {type: mime});
                 // return byteArrays;
             }
@@ -138,11 +201,11 @@ const CheckEditing = (props) => {
 
                 console.log({arr});
 
-                while(n--){
+                while (n--) {
                     u8arr[n] = bstr.charCodeAt(n);
                 }
 
-                return new File([u8arr], filename, {type:mime});
+                return new File([u8arr], filename, {type: mime});
             }
 
             const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
@@ -150,7 +213,7 @@ const CheckEditing = (props) => {
             console.log({base64});
             console.log({base64ImageContent});
 
-            const file = base64ToFile(base64, '1.jpeg');
+            const file = base64ToFile(base64, '1.png');
             // const file = dataURLtoFile(base64, '1.jpg');
 
             const formData = new FormData();
@@ -196,7 +259,7 @@ const CheckEditing = (props) => {
 
         };
 
-        /*const takePhotoFromCamera = () => {
+        const takePhotoFromCamera = () => {
             ImagePicker.openCamera({
                 width: 300,
                 height: 400,
@@ -214,7 +277,10 @@ const CheckEditing = (props) => {
             }).then(image => {
                 console.log(image);
             });
-        }*/
+        }
+
+
+
 
         if (props.tree.children !== undefined) {
             const [valueText, setText] = useState('');
@@ -255,6 +321,9 @@ const CheckEditing = (props) => {
 
             const bs = React.createRef()
             const fall = new Animated.Value(1);
+debugger;
+
+
 
             return props.tree.children.map((value, index) => {
                 return (
@@ -266,10 +335,14 @@ const CheckEditing = (props) => {
                         </DataTable.Header>*/}
 
                         {(value.name !== undefined) ? value.children.map((value2, index2) => {
+                            //console.log(props.results[props.route.params.itemId].files + "FILES");
                             return (
                                 <>
+
+
+
                                     {(value2.id == props.route.params.itemId) ?
-                                        <View style={styles.container}>
+                                        <View style={[styles.containerSlider, { width: width, height: height }]}>
 
                                             <BottomSheet
                                                 ref={bs}
@@ -281,23 +354,24 @@ const CheckEditing = (props) => {
                                                 enabledGestureInteraction={true}
                                             />
                                             <Animated.View style={{
-                                                margin: 20,
+                                                margin: 0,
                                                 opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
                                             }}>
                                                 <View style={{alignContent: 'center'}}>
                                                     <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
                                                         <View style={{
-                                                            height: 200,
-                                                            width: 260,
+                                                            height: 100,
+                                                            width: width,
                                                             borderRadius: 15,
                                                             justifyContent: 'center',
                                                             alignItems: 'center',
                                                         }}>
+
                                                             <ImageBackground
                                                                 source={{
-                                                                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'
+                                                                    //uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'
                                                                 }}
-                                                                style={{height: 100, width: 100}}
+                                                                style={{ height: 50, width: width }}
                                                                 imageStyle={{borderRadius: 15}}
                                                             >
                                                                 <View style={{
@@ -305,44 +379,32 @@ const CheckEditing = (props) => {
                                                                     justifyContent: 'center',
                                                                     alignItems: 'center'
                                                                 }}>
-                                                                    <Icon name="camera" size={35} color="#fff" style={{
+                                                                    <Icon name="camera" size={55} color="#000" style={{
                                                                         opacity: 0.7,
                                                                         alignItems: 'center',
                                                                         justifyContent: 'center',
                                                                         borderWidth: 1,
-                                                                        borderColor: '#fff',
+                                                                        borderColor: '#000',
                                                                         borderRadius: 10,
                                                                     }}/>
                                                                 </View>
                                                             </ImageBackground>
+
                                                         </View>
                                                     </TouchableOpacity>
                                                 </View>
-                                                {/*<Text>
-                                                    {value2.name}
-                                                </Text>
-                                                <View style={styles.action}>
-                                                    <FontAwesome name="edit" size={35}/>
-                                                    <TextInput
-                                                        style={[styles.TextInput, {}]}
-                                                        placeholder='(Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9)'
-                                                        placeholderTextColor="#666666"
-                                                        autoCorrect={false}
-                                                        onChange={HandleInputChange}
-                                                    />*/}
-
-                                                <EnterText {...props}/>
                                                 <View>
-                                                    {/*<Text>{'value'}{' : '}{valueText}{'/'}{'itemId'}{' : '}{value2.id}{'/'}{'checkId'}{' : '}{props.check.id}</Text>*/}
-                                                    {/*props.results.data.model.text*/}
+                                                    <EnterPictures />
                                                 </View>
-                                                <View style={{ margin: 40 }}>
-                                                    <EnterCoefficient {...props}/>
-                                                    <Text>1111</Text>
+                                                <View>
+                                                    <Text>{value2.name}</Text>
                                                 </View>
-
-
+                                                <View style={{padding: 20}}>
+                                                    <EnterComments {...props}/>
+                                                </View>
                                             </Animated.View>
+
+
                                         </View>
                                         : []}
                                 </>
@@ -355,27 +417,26 @@ const CheckEditing = (props) => {
         return null
     }
 
-
     return (
         <View style={styles.container}>
-            <SafeAreaView style={styles.container}>
-                <ScrollView style={styles.scrollView}>
-                    <DataTable style={{paddingTop: 20}}>
-                        <GetTreeItems/>
-                    </DataTable>
-                </ScrollView>
-            </SafeAreaView>
+            <GetTreeItems/>
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
-        height: 800
+        height: 1024
     },
+    containerSlider: {
+        marginTop: 0,
+    },
+    scroll: {},
+    image: { resizeMode: 'cover' },
+    pagination: {flexDirection: 'row', position: 'absolute', bottom: 0, alignSelf: 'center'},
+    pagingText: {color: '#888', margin: 3},
+    pagingActiveText: {color: '#fff', margin: 3},
     action: {
         flexDirection: 'row',
         marginTop: 10,

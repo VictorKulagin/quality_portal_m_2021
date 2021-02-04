@@ -24,7 +24,15 @@ const checkEditingReducer = (state = initialState, action) => {
             return { ...state,  ...action.check, ...action.results, ...action.tree }
         }
         case IMG_DATA: {
-            return { ...state,  results: action.results/*[11241].files*/ }
+            debugger;
+            let newResults = state.results;
+            let item_id = action.results.data.files[0].item_id;
+            //console.log(action.results.data.files[0].item_id + ' Idfiles');
+            let item_results = {...newResults[item_id], files: action.results.data.files};
+
+            newResults = {...newResults, [item_id]: item_results}
+
+            return { ...state,  results: newResults/*[11241].files*/ }
     }
         case TEXT_DATA: {
 debugger;

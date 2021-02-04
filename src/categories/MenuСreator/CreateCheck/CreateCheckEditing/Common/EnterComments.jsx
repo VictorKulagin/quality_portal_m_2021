@@ -15,53 +15,62 @@ import * as ImagePicker from 'expo-image-picker';
 
 const UselessTextInput = (props) => {
     return (
-         <TextInput
-             {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
-             editable
-             maxLength={400}
-         />
+        <TextInput
+            {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
+            editable
+            maxLength={400}
+        />
     );
 }
 
-const EnterText = (props) => {
+const EnterComments = (props) => {
+    debugger;
+    console.log(props);
+
+
+
+    if(JSON.stringify(props.results) !== "{}" && props.results !== undefined){
+        const [valueText, onChangeText] = React.useState(Notes);
+
+        function Notes(){
             debugger;
-            console.log(props);
-            const [valueText, onChangeText] = React.useState(Notes);
+                //console.log(props.results[props.route.params.itemId].text.text + "yyy")
+                return  props.results[props.route.params.itemId].text !== undefined ? props.results[props.route.params.itemId].text.text : []
+        }
+        debugger;
+        return (
+            <View
+                style={{
+                    /*backgroundColor: value,*/
+                    borderBottomColor: '#000000',
+                    borderBottomWidth: 1,
+                }}>
+                <UselessTextInput
+                    multiline
+                    numberOfLines={4}
+                    onChangeText={text => onChangeText(text)}
+                    value={valueText}
+                    placeholder='Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9'
+                />
 
-            function Notes(){
-                debugger;
-                return (props.results[props.route.params.itemId].text) ? props.results[props.route.params.itemId].text.text : []
-            }
+                <TouchableOpacity style={styles.commandButton}
+                                  onPress={
+                                      () => props.navigation.push('Редактировать проверку', {
+                                          valueText: valueText,
+                                          itemId: props.route.params.itemId,
+                                          checkId: props.route.params.checkId,
+                                          //parentId: props.route.params.parentId
+                                      })}
+                >
+                    <Text style={{color: '#ffffff'}}>Отправить</Text>
+                </TouchableOpacity>
+            </View>
+        );
+        return null;
+    } else {
+        return null;
+    }
 
-            return (
-                <View
-                    style={{
-                        /*backgroundColor: value,*/
-                        borderBottomColor: '#000000',
-                        borderBottomWidth: 1,
-                    }}>
-                    <UselessTextInput
-                        multiline
-                        numberOfLines={4}
-                        onChangeText={text => onChangeText(text)}
-                        value={valueText}
-                        placeholder='Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9'
-                    />
-
-                    <TouchableOpacity style={styles.commandButton}
-                                      onPress={
-                                          () => props.navigation.push('Редактировать проверку', {
-                                              valueText: valueText,
-                                              itemId: props.route.params.itemId,
-                                              checkId: props.route.params.checkId,
-                                              //parentId: props.route.params.parentId
-                                          })}
-                    >
-                        <Text style={{color: '#ffffff'}}>Отправить</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-            return null;
 }
 
 const styles = StyleSheet.create({
@@ -139,14 +148,14 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
 
-      baseText: {
+    baseText: {
         fontFamily: "Cochin"
-      },
-      titleText: {
+    },
+    titleText: {
         fontSize: 20,
         fontWeight: "bold"
-      }
+    }
 
 })
 
-export default EnterText;
+export default EnterComments;
