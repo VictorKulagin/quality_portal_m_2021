@@ -13,81 +13,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import  EnterComments from '../CreateCheckEditing/Common/EnterComments'
 
-
-
-//import ImagePicker from 'react-native-image-crop-picker';
-
-//import styles from "react-native-webview/lib/WebView.styles";
-//import { ImageBrowser } from 'expo-image-picker-multiple';
 import * as ImagePicker from 'expo-image-picker';
-import EnterCoefficient from "./Common/EnterCoefficient";
-//import ReactNativePickerModule from "react-native-picker-module";
-//import Gallery from 'react-native-gallery';
+//import EnterCoefficient from "./Common/EnterCoefficient";
+import EnterPictures from "./Common/EntetPictures";
+import EnterCoefficientPicker from "./Common/EnterCoefficientPicker";
+
 
 
 
 
 const CheckEditing = (props) => {
-
-    const width = Dimensions.get('window').width;
-    const height = width * 100 / 180;
-
-    /*function Width() {
-        return Dimensions.get('window').width;
-    }
-
-    function Height() {
-        return width * 100 / 60;
-    }*/
-
-    console.log(width + " | " + height);
-
-    function EnterPictures() {
-        const [active, setActive] = useState(0);
-        console.log(active);
-        const change = ({nativeEvent}) => {
-            const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
-            if(slide !== active){
-                setActive(slide);
-            }
-        }
-        if(props.results !== undefined && props.results[props.route.params.itemId].files !== undefined)
-        {
-                return (
-                    <>
-                        <View >
-                            <ScrollView
-                                pagingEnabled
-                                horizontal
-                                onScroll={change}
-                                showsHorizontalScrollIndicator={false}
-                                style={[styles.scroll, { width: width, height: height }]}>
-                            {
-                                props.results[props.route.params.itemId].files.map((value, index) => (
-
-                                    <Image
-                                        key={index}
-                                        source={{uri: "http://109.73.14.239/upload/part1/" + value.file_name}}
-                                        style={[styles.image, { width: width, height: height }]}
-                                    />
-
-                                ))
-                            }
-                            </ScrollView>
-                            <View style={styles.pagination}>
-                                {
-                                    props.results[props.route.params.itemId].files.map((value, index) => (
-                                        <Text key={index} style={index === active ? styles.pagingActiveText : styles.pagingText}><Icon name="brightness-1" size={15}/></Text>
-                                    ))
-                                }
-                            </View>
-                        </View>
-                    </>
-                )
-        }
-    }
-
-
 
     function GetTreeItems() {
         //const bs = React.createRef();
@@ -97,69 +32,12 @@ const CheckEditing = (props) => {
 
         const pickImage = async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
-                // mediaTypes: ImagePicker.MediaTypeOptions.All,
-                // allowsEditing: true,
-                // aspect: [4, 3],
-                // quality: 1,
-                // base64: false
-
                 exif: true,
                 allowsEditing: false,
                 quality: 0.7,
                 base64: true
             });
-
-            //let localUri = result.uri;
             let base64 = result.uri;
-            // let filename = base64.split('/').pop();
-            //
-            // let match = /\.(\w+)$/.exec(filename);
-            // let type = match ? `image/${match[1]}` : `image`;
-
-            // function dataURItoBlob(dataURI) {
-            //     if(typeof dataURI !== 'string'){
-            //         throw new Error('Invalid argument: dataURI must be a string');
-            //     }
-            //     dataURI = dataURI.split(',');
-            //     var type = dataURI[0].split(':')[1].split(';')[0],
-            //         byteString = atob(dataURI[1]),
-            //         byteStringLength = byteString.length,
-            //         arrayBuffer = new ArrayBuffer(byteStringLength),
-            //         intArray = new Uint8Array(arrayBuffer);
-            //     for (var i = 0; i < byteStringLength; i++) {
-            //         intArray[i] = byteString.charCodeAt(i);
-            //     }
-            //     return new Blob([intArray], {
-            //         type: type
-            //     });
-            // }
-            //
-            // var blob = dataURItoBlob(result.uri);
-
-            // let result = await ImagePicker.launchCameraAsync({
-            //     allowsEditing: true,
-            //     aspect: [4, 3],
-            // });
-
-            // console.log({result});
-            // console.log({blob});
-            // console.log({base64: result.base64});
-
-            // let localUri = result.uri;
-            // let filename = localUri.split('/').pop();
-            //
-            // // Infer the type of the image
-            // let match = /\.(\w+)$/.exec(filename);
-            // let type = match ? `image/${match[1]}` : `image`;
-
-            // // Upload the image using the fetch and FormData APIs
-            // let formData = new FormData();
-            // // Assume "photo" is the name of the form field the server expects
-            // formData.append('photo', { uri: localUri, name: filename, type });
-
-
-            // console.log(result);
-
             function base64ToFile(base64, name) {
                 mime = mime || '';
                 var arr = base64.split(','),
@@ -187,10 +65,8 @@ const CheckEditing = (props) => {
                 }
 
                 return new File(byteArrays, name, {type: mime});
-                // return new Blob(byteArrays, {type: mime});
-                // return byteArrays;
-            }
 
+            }
             function dataURLtoFile(dataurl, filename) {
 
                 var arr = dataurl.split(','),
@@ -207,14 +83,12 @@ const CheckEditing = (props) => {
 
                 return new File([u8arr], filename, {type: mime});
             }
-
             const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
 
             console.log({base64});
             console.log({base64ImageContent});
 
             const file = base64ToFile(base64, '1.png');
-            // const file = dataURLtoFile(base64, '1.jpg');
 
             const formData = new FormData();
             formData.append('file', file);
@@ -227,38 +101,16 @@ const CheckEditing = (props) => {
                 })
             };
 
-            // return {
-            //     pickImageChoose: props.navigation.navigate('Редактировать проверку', {
-            //         // formDataImg: result.uri,
-            //         //formDataImg: {uri: localUri, name: filename, type},
-            //         formDataImg: {uri: base64ToBlob, name: filename, type},
-            //         itemId: props.route.params.itemId,
-            //         checkId: props.route.params.checkId
-            //     })
-            // };
-
-            /*if (!result.cancelled) {
-                setImage(result.uri);
-            }*/
         };
-
         const pickImageAllow = async () => {
-
             let resultLaunch = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 1,
             });
-
             console.log(resultLaunch);
-
-            /*if (!result.cancelled) {
-                setImage(result.uri);
-            }*/
-
         };
-
         const takePhotoFromCamera = () => {
             ImagePicker.openCamera({
                 width: 300,
@@ -268,7 +120,6 @@ const CheckEditing = (props) => {
                 console.log(image);
             });
         }
-
         const choosePhotoFromLibrary = () => {
             ImagePicker.openPicker({
                 width: 300,
@@ -280,8 +131,6 @@ const CheckEditing = (props) => {
         }
 
 
-
-
         if (props.tree.children !== undefined) {
             const [valueText, setText] = useState('');
 
@@ -290,9 +139,9 @@ const CheckEditing = (props) => {
             ///console.log(props.data);
             const renderInner = () => (
                 <View style={styles.panel}>
-                    <View>
+                    {/*<View>
                         <Text> {'itemId '}{props.route.params.itemId} {'\\'} {'checkId '}{props.route.params.checkId} </Text>
-                    </View>
+                    </View>*/}
                     <View style={{alignItems: 'center'}}>
                         <Text style={styles.panelTitle}>Загрузить фото</Text>
                         <Text style={styles.panelSubtitle}>Выберете фотографии</Text>
@@ -328,21 +177,27 @@ debugger;
             return props.tree.children.map((value, index) => {
                 return (
                     <>
-                        {/*<DataTable.Header style={styles.bgColor}>
-                            <DataTable.Title numberOfLines={8}>
-                                <Text key={index} style={[styles.bgColor, {fontSize: 16}]}>{value.name}</Text>
-                            </DataTable.Title>
-                        </DataTable.Header>*/}
 
                         {(value.name !== undefined) ? value.children.map((value2, index2) => {
-                            //console.log(props.results[props.route.params.itemId].files + "FILES");
                             return (
                                 <>
-
-
-
                                     {(value2.id == props.route.params.itemId) ?
-                                        <View style={[styles.containerSlider, { width: width, height: height }]}>
+                                        <View>
+
+                                            <View>
+                                                <View>
+                                                    <EnterPictures {...props}/>
+                                                </View>
+                                                <View>
+                                                    <Text>{value2.name}</Text>
+                                                </View>
+                                                <View style={{padding: 20}}>
+                                                    <EnterComments {...props}/>
+                                                </View>
+                                                <View style={{padding: 50}}>
+                                                    <EnterCoefficientPicker {...props}/>
+                                                </View>
+                                            </View>
 
                                             <BottomSheet
                                                 ref={bs}
@@ -360,8 +215,8 @@ debugger;
                                                 <View style={{alignContent: 'center'}}>
                                                     <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
                                                         <View style={{
-                                                            height: 100,
-                                                            width: width,
+                                                            height: 200,
+                                                            //width: 700,
                                                             borderRadius: 15,
                                                             justifyContent: 'center',
                                                             alignItems: 'center',
@@ -371,7 +226,7 @@ debugger;
                                                                 source={{
                                                                     //uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'
                                                                 }}
-                                                                style={{ height: 50, width: width }}
+                                                                style={{ height: 10, /*width: width*/ }}
                                                                 imageStyle={{borderRadius: 15}}
                                                             >
                                                                 <View style={{
@@ -393,18 +248,7 @@ debugger;
                                                         </View>
                                                     </TouchableOpacity>
                                                 </View>
-                                                <View>
-                                                    <EnterPictures />
-                                                </View>
-                                                <View>
-                                                    <Text>{value2.name}</Text>
-                                                </View>
-                                                <View style={{padding: 20}}>
-                                                    <EnterComments {...props}/>
-                                                </View>
                                             </Animated.View>
-
-
                                         </View>
                                         : []}
                                 </>
@@ -427,16 +271,11 @@ debugger;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: 1024
+        //height: 1024
     },
     containerSlider: {
         marginTop: 0,
     },
-    scroll: {},
-    image: { resizeMode: 'cover' },
-    pagination: {flexDirection: 'row', position: 'absolute', bottom: 0, alignSelf: 'center'},
-    pagingText: {color: '#888', margin: 3},
-    pagingActiveText: {color: '#fff', margin: 3},
     action: {
         flexDirection: 'row',
         marginTop: 10,
@@ -480,7 +319,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     panel: {
-        padding: 20,
+        padding: 40,
         backgroundColor: '#FFFFFF',
         paddingTop: 20,
         // borderTopLeftRadius: 20,
