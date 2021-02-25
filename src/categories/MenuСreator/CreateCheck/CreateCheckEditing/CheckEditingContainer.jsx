@@ -43,12 +43,12 @@ const CheckEditingContainer = (props) => {
 
     useEffect(() => {
         debugger;
-        if(props.route.params?.selectedValue && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
+        if(props.route.params?.value && props.route.params?.itemId && props.route.params?.checkId){ //value, itemId, checkId
             debugger;
-            props.getCoefficientThunkEditingAPI(props.route.params?.selectedValue, props.route.params?.itemId, props.route.params?.checkId);
+            props.getCoefficientThunkEditingAPI(props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId);
             //console.log(props.route.params?.formDataImg)
         }
-    }, [props.route.params?.selectedValue, props.route.params?.itemId, props.route.params?.checkId]);
+    }, [props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId]);
 
     console.log(props);
     debugger

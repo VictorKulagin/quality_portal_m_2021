@@ -3,19 +3,24 @@ import {
     StyleSheet, Text, View,
     Modal, TouchableOpacity, SafeAreaView
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {ModalPicker} from './InsideEnterCoefficientPicker/ModalPicker'
 
+
 const EnterCoefficientPicker = (props) => {
-    const [chooseData, setchooseData] = useState('Select Item...');
+    debugger;
+    const [chooseData, setchooseData] = useState(props.results[props.route.params.itemId].coefficient ? props.results[props.route.params.itemId].coefficient.value : 'Select Item...');
     const [isModalVisible, setisModalVisible] = useState(false);
 
     const changeModalVisibility = (bool) => {
         setisModalVisible(bool)
     }
+
     const setData = (option) => {
-        setchooseData(option)
+        props.navigation.navigate('Редактировать проверку', {
+            value: option,
+            itemId: props.route.params.itemId,
+            checkId: props.route.params.checkId})
     }
     return(
         <SafeAreaView style={styles.container}>
@@ -23,7 +28,9 @@ const EnterCoefficientPicker = (props) => {
                 onPress={() => changeModalVisibility(true)}
                 style={styles.touchableOpacity}
             >
+                {!!chooseData &&
                 <Text style={styles.text}>{chooseData}</Text>
+                }
             </TouchableOpacity>
             <Modal
                 transparent={true}
@@ -43,18 +50,21 @@ const EnterCoefficientPicker = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 20
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 1
     },
     text: {
-        marginVertical: 20,
-        fontSize: 25
+        marginVertical: 8,
+        fontSize: 25,
+        textAlign: 'center',
+        color: '#ffffff'
     },
     touchableOpacity: {
-        backgroundColor: 'orange',
+        width: '100%',
+        backgroundColor: '#eb2d93',
         alignSelf: 'stretch',
-        paddingHorizontal: 20,
-        marginHorizontal: 20
+        borderRadius: 10,
     }
 });
 

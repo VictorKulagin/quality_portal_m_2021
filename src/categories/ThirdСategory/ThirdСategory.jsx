@@ -44,7 +44,7 @@ const ThirdCategories = (props) => {
                             }]}
                         >
                             <Text style={[styles.textSign, {
-                                color: '#333333',
+                                color: '#ffffff',
                             }]}>{item.title}</Text>
 
 <View>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         marginBottom: 40
     },
     signIn: {
-        backgroundColor: '#ffedad',
+        backgroundColor: '#eb2d93',
         padding: 20,
         marginVertical: 10,
         marginHorizontal: 10,

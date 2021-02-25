@@ -64,7 +64,7 @@ export const loadScreenAuthAPI = {
 debugger;
 export const CreateCheckAPI = {
     CreateCheck(parentIdCheck) {
-         return instance.get(`api/check/create?parent_id=${parentIdCheck}&access-token=`+ config.accessTocken)
+         return instance.get(`api/check/create?parent_id=${parentIdCheck}&access-token=`+ config.accessTocken);
     },
     ViewCheck(parentIdCheck, checkIdCheck) {
         return instance.get(`api/check/view?parent_id=${parentIdCheck}&check_id=${checkIdCheck}&access-token=`+ config.accessTocken);
@@ -74,6 +74,12 @@ export const CreateCheckAPI = {
     },
     ShowResults (parentId, checkId){
         return instance.get(`api/check/view?parent_id=${parentId}&check_id=${checkId}&access-token=`+ config.accessTocken);
+    }
+}
+
+export const EndCheckAPI = {
+    EndCheckAPI(parentIdCheck, checkId) {
+        return instance.get(`api/check/finish?parent_id=${parentIdCheck}&check_id=${checkId}&access-token=`+ config.accessTocken);
     }
 }
 
@@ -113,7 +119,7 @@ export const  DataEditingAPI = {
         //     },
         // });
 
-        return instance.post(`api/results/add-file?access-token=`+ config.accessTocken,  formData, {
+        return instance.post(`api/results/add-file-new?access-token=`+ config.accessTocken,  formData, {
             'Content-Type': 'multipart/form-data'
         }
         )/*.then(function () {

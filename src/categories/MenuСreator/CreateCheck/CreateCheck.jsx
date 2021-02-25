@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 
 //import '../../../common/grid.css'; //Import here your file style
 
-import { FlatGrid, SectionGrid } from 'react-native-super-grid';
+import {FlatGrid, SectionGrid} from 'react-native-super-grid';
 
 import {
     ScrollView,
@@ -10,36 +10,36 @@ import {
     Text,
     StyleSheet,
     SafeAreaView,
-    Dimensions
+    Dimensions, TouchableOpacity
 } from "react-native";
 
-import { DataTable } from 'react-native-paper';
+import {DataTable} from 'react-native-paper';
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/TouchableRipple";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 const CreateCheck = (props) => {
 
-    function GetTreeText({id}){
-            if (props.results !== undefined) {
-                    return (
-                        <>
-                            <View style={{width: OptionCellComment}}>
-                                <Text >{(props.results[id].text) ? props.results[id].text.text : []}</Text>
-                            </View>
-                        </>
-                    )
-            }
-            return null
+    debugger;
+
+    function GetTreeText({id}) {
+        if (props.results !== undefined) {
+            return (
+                <>
+                    <View style={{width: OptionCellComment}}>
+                        <Text>{(props.results[id].text) ? props.results[id].text.text : []}</Text>
+                    </View>
+                </>
+            )
+        }
+        return null
     }
 
-function GetTreeItems()
-    {
+    function GetTreeItems() {
         if (props.tree.children !== undefined) {
             //const [valueText, setText] = useState('');
             //const HandleInputChange = event => setText(event.nativeEvent.text);
             ///console.log(props.data);
-
             return props.tree.children.map((value, index) => {
                 return (
                     <>
@@ -52,7 +52,8 @@ function GetTreeItems()
                             return (
                                 <DataTable.Row style={styles.dataTableRow}>
                                     <TouchableRipple style={{width: OptionCellDescription}}>
-                                        <Text style={{ /*flexGrow: 1*/  }}> {value2.name} {/*(props.model !== null && props.model.item_id == value2.id ) ? props.model.text : ""*/}</Text>
+                                        <Text
+                                            style={{ /*flexGrow: 1*/}}> {value2.name} {/*(props.model !== null && props.model.item_id == value2.id ) ? props.model.text : ""*/}</Text>
                                     </TouchableRipple>
 
                                     <View key={index2}>
@@ -61,29 +62,31 @@ function GetTreeItems()
                                     <TouchableRipple style={{width: CameraCellDescription, justifyContent: 'center'}}>
                                         <View>
                                             <Icon name="camera" size={35} color="#000"
-                                            style={{
-                                                 opacity: 0.7,
-                                                 alignItems: 'center',
-                                                 justifyContent: 'center',
-                                                 borderWidth: 1,
-                                                 borderColor: '#000',
-                                                 borderRadius: 10,
-                                            }}
-                                            onPress={() => props.navigation.navigate('Редактировать проверку', {
-                                                itemId: value2.id,
-                                                checkId: props.check.id,
-                                                parentId: props.route.params.parentId
-                                            })}/>
+                                                  style={{
+                                                      opacity: 0.7,
+                                                      alignItems: 'center',
+                                                      justifyContent: 'center',
+                                                      borderWidth: 1,
+                                                      borderColor: '#000',
+                                                      borderRadius: 10,
+                                                  }}
+                                                  onPress={() => props.navigation.navigate('Редактировать проверку', {
+                                                      itemId: value2.id,
+                                                      checkId: props.check.id,
+                                                      parentId: props.route.params.parentId
+                                                  })}/>
 
                                         </View>
                                     </TouchableRipple>
 
-                                    <TouchableRipple style={{ width: CoefficientCellDescription, justifyContent: 'center' }} >
-                                        <Text style={{ textAlign: 'center'}}>1</Text>
+                                    <TouchableRipple
+                                        style={{width: CoefficientCellDescription, justifyContent: 'center'}}>
+                                        <Text style={{textAlign: 'center'}}>1</Text>
                                     </TouchableRipple>
                                 </DataTable.Row>
                             )
                         }) : ''}
+
                     </>
                 )
             })
@@ -91,16 +94,35 @@ function GetTreeItems()
         return null
     }
 
+    function EndCheck() {
+        return (
+            <View>
+                <View>
+                    <TouchableOpacity onPress={() => alert("Завершить проверку")} style={styles.touchableOpacity}>
+                        <Text style={styles.touchableOpacityText}>Завершить проверку</Text>
+                        <Text>{`${props.route.params.parentId}  ${props.route.params.checkId}`}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <Text style={styles.touchableOpacityNotes}>
+                        При нажатии завершить проверку: автоотчет на почту: Техническому директору, Заместителю директора, Административному директору,
+                    </Text>
+                </View>
+            </View>
+        )
+        return null
+    }
 
-        const padding = 10;
-        const deviceWidth = Dimensions.get('window').width;
-        const OptionCellDescription = (deviceWidth / 2) - (padding * 4);
-        const OptionCellComment = (deviceWidth / 2.2) - (padding * 4);
-        const CameraCellDescription = (deviceWidth / 13.1) - (padding * 4);
-        const CoefficientCellDescription = (deviceWidth / 10) - (padding * 4);
 
-        console.log(OptionCellDescription);
-        console.log(CameraCellDescription);
+    const padding = 10;
+    const deviceWidth = Dimensions.get('window').width;
+    const OptionCellDescription = (deviceWidth / 2) - (padding * 4);
+    const OptionCellComment = (deviceWidth / 2.2) - (padding * 4);
+    const CameraCellDescription = (deviceWidth / 13.1) - (padding * 4);
+    const CoefficientCellDescription = (deviceWidth / 10) - (padding * 4);
+
+    console.log(OptionCellDescription);
+    console.log(CameraCellDescription);
 
     return (
         <View style={styles.container}>
@@ -108,8 +130,9 @@ function GetTreeItems()
                 <ScrollView style={styles.scrollView}>
                     <DataTable>
                         <DataTable.Header>
-                            <DataTable.Title><Text style={[styles.tableWorld, {fontSize: 16}]}>Информация о
-                                проверке</Text></DataTable.Title>
+                            <DataTable.Title>
+                                <Text style={[styles.tableWorld, {fontSize: 16}]}>Информация о проверке</Text>
+                            </DataTable.Title>
                         </DataTable.Header>
 
                         <DataTable.Header>
@@ -149,6 +172,7 @@ function GetTreeItems()
 
                     <DataTable style={{paddingTop: 20}}>
                         <GetTreeItems/>
+                        <EndCheck/>
                     </DataTable>
                 </ScrollView>
             </SafeAreaView>
@@ -172,7 +196,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginHorizontal: 10,
 
-        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOffset: {height: 1, width: 1}, // IOS
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         elevation: 2, // Android
@@ -256,7 +280,42 @@ const styles = StyleSheet.create({
         padding: 10
     },
 
+    touchableOpacity: {
+        //width: '100%',
+        backgroundColor: '#eb2d93',
+        alignSelf: 'stretch',
+        borderRadius: 10,
+        paddingBottom: 20,
+        paddingTop: 20,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 25,
+        marginBottom: 10
+    },
+    touchableOpacityText: {
+        color:'#ffffff',
+        textAlign:'center',
+        fontSize:20
+    },
+    touchableOpacityNotes: {
+        //width: '100%',
+        backgroundColor: '#f1b9d7',
 
+        borderTopColor: '#eb2d93',
+        borderLeftColor: '#eb2d93',
+        borderRightColor: '#eb2d93',
+        borderBottomColor: '#eb2d93',
+        borderWidth: 1,
+        borderRadius: 10,
+        textAlign: 'center',
+        alignSelf: 'stretch',
+        paddingBottom: 20,
+        paddingTop: 20,
+        marginLeft: 10,
+        marginRight: 10,
+        //marginTop: 25,
+        marginBottom: 25
+    },
     centeredView: {
         flex: 1,
         justifyContent: "center",

@@ -110,6 +110,7 @@ export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
 export const getFilesThunkEditingAPI = (formData/*, itemId, checkId*/) => {
     return (dispatch) => {
         debugger;
+
         DataEditingAPI.AddFile(formData/*, itemId, checkId*/).then(response => {
             //console.log(response.data);
             debugger;

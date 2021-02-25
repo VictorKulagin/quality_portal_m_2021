@@ -18,7 +18,8 @@ const UselessTextInput = (props) => {
         <TextInput
             {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
             editable
-            maxLength={400}
+            maxLength={500}
+            style={styles.enterInput}
         />
     );
 }
@@ -31,6 +32,7 @@ const EnterComments = (props) => {
 
     if(JSON.stringify(props.results) !== "{}" && props.results !== undefined){
         const [valueText, onChangeText] = React.useState(Notes);
+        /*const [defaultStyle, setdefaultStyle] = React.useState(true);*/
 
         function Notes(){
             debugger;
@@ -43,17 +45,22 @@ const EnterComments = (props) => {
                 style={{
                     /*backgroundColor: value,*/
                     borderBottomColor: '#000000',
-                    borderBottomWidth: 1,
+                    //borderBottomWidth: 1,
                 }}>
                 <UselessTextInput
                     multiline
                     numberOfLines={4}
-                    onChangeText={text => onChangeText(text)}
+                    onChangeText={text => {
+                        // alert(text)
+                        onChangeText(text)
+                        /*setdefaultStyle(!defaultStyle)*/
+                    }}
+                    //onPress={() => setdefaultStyle(!defaultStyle)}
                     value={valueText}
                     placeholder='Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9'
                 />
 
-                <TouchableOpacity style={styles.commandButton}
+                <TouchableOpacity style={ /*defaultStyle ? styles.commandButton :*/ styles.commandButtonHidden}
                                   onPress={
                                       () => props.navigation.push('Редактировать проверку', {
                                           valueText: valueText,
@@ -98,7 +105,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#eb2d93',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 90,
+        display: 'none'
+    },
+    commandButtonHidden: {
+        padding: 15,
+        borderRadius: 10,
+        backgroundColor: '#eb2d93',
+        alignItems: 'center',
+        marginTop: 90,
     },
     header: {
         backgroundColor: '#FFFFFF',
@@ -154,6 +169,22 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 20,
         fontWeight: "bold"
+    },
+    enterInput: {
+        ///height: 55,
+        color: '#000',
+        borderColor: '#eb2d93',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderRadius: 15,
+        width: '100%',
+        paddingLeft: 10,
+        paddingRight: 10,
+        /*marginLeft: 10,
+        marginTop: 10,*/
+        backgroundColor: 'white',
+        position: 'absolute',
+        zIndex: 2
     }
 
 })

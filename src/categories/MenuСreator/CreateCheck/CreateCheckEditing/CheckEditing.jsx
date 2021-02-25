@@ -1,5 +1,19 @@
 import React, {useState} from 'react'
-import {View, Image, Text, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, ScrollView, Dimensions, Platform, Picker, Alert, Button } from "react-native";
+import {
+    View,
+    Image,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    ImageBackground,
+    SafeAreaView,
+    ScrollView,
+    Dimensions,
+    Platform,
+    Picker,
+    Alert,
+    Button
+} from "react-native";
 import {StyleSheet} from "react-native";
 import {DataTable} from "react-native-paper";
 
@@ -11,21 +25,20 @@ import TouchableRipple from "react-native-paper/src/components/TouchableRipple/T
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import  EnterComments from '../CreateCheckEditing/Common/EnterComments'
+import EnterComments from '../CreateCheckEditing/Common/EnterComments'
 
 import * as ImagePicker from 'expo-image-picker';
-//import EnterCoefficient from "./Common/EnterCoefficient";
+
 import EnterPictures from "./Common/EntetPictures";
 import EnterCoefficientPicker from "./Common/EnterCoefficientPicker";
-
-
-
+import FileGetContents from "./Common/FileGetContents/base64ToFile";
+import file_get_contents from "./Common/FileGetContents/base64ToFile";
+import base64ToFile from "./Common/FileGetContents/base64ToFile";
 
 
 const CheckEditing = (props) => {
 
     function GetTreeItems() {
-        //const bs = React.createRef();
 
         const bs = React.useRef(null);
         const fall = new Animated.Value(1);
@@ -36,62 +49,53 @@ const CheckEditing = (props) => {
                 allowsEditing: false,
                 quality: 0.7,
                 base64: true
+
             });
+
             let base64 = result.uri;
-            function base64ToFile(base64, name) {
-                mime = mime || '';
-                var arr = base64.split(','),
-                    mime = arr[0].match(/:(.*?);/)[1];
 
-                base64 = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+            /*Define OS*/
+            if ((Platform.OS === 'ios' || Platform.OS === 'android')) {
+                debugger;
+                const response = await fetch(base64);
+                const blob = await response.blob();
+                const namePhone = blob._data.name;
+                const typeIm = blob._data.type
 
-                console.log({mime});
-
-                const sliceSize = 1024;
-                const byteChars = window.atob(base64);
-                const byteArrays = [];
-
-                for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-                    const slice = byteChars.slice(offset, offset + sliceSize);
-
-                    const byteNumbers = new Array(slice.length);
-                    for (let i = 0; i < slice.length; i++) {
-                        byteNumbers[i] = slice.charCodeAt(i);
-                    }
-
-                    const byteArray = new Uint8Array(byteNumbers);
-
-                    byteArrays.push(byteArray);
-                }
-
-                return new File(byteArrays, name, {type: mime});
-
-            }
-            function dataURLtoFile(dataurl, filename) {
-
-                var arr = dataurl.split(','),
+                const base64Phone = `data:${typeIm};base64,${result.base64}`;
+                base64ToFile(base64Phone, namePhone)
+                const base64ImageContent = base64Phone.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+                const arr = base64Phone.split(','),
                     mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[1]),
-                    n = bstr.length,
-                    u8arr = new Uint8Array(n);
+                    ext = arr[0].match(/:image\/(.*?);/)[1];
 
-                console.log({arr});
+                const file = base64ToFile(base64Phone, 'filename.' + ext);
 
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
+                const formData = new FormData();
 
-                return new File([u8arr], filename, {type: mime});
+                formData.append('file', base64Phone);
+                formData.append('itemId', props.route.params.itemId);
+                formData.append('checkId', props.route.params.checkId);
+
+                return {
+                    pickImageChoose: props.navigation.navigate('Редактировать проверку', {
+                        formData
+                    })
+                };
+
             }
+
+            base64ToFile(base64, name)
+
             const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+            const arr = base64.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                ext = arr[0].match(/:image\/(.*?);/)[1];
 
-            console.log({base64});
-            console.log({base64ImageContent});
-
-            const file = base64ToFile(base64, '1.png');
+            const file = base64ToFile(base64, 'filename.' + ext);
 
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', base64);
             formData.append('itemId', props.route.params.itemId);
             formData.append('checkId', props.route.params.checkId);
 
@@ -102,15 +106,81 @@ const CheckEditing = (props) => {
             };
 
         };
+
+
         const pickImageAllow = async () => {
             let resultLaunch = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                exif: true,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 1,
+                base64: true
             });
+            debugger;
+            //let base64 = result.uri;
+            console.log(resultLaunch.uri);
+
+            let base64 = resultLaunch.uri
+
             console.log(resultLaunch);
+
+            if ((Platform.OS === 'ios' || Platform.OS === 'android')) {
+                debugger;
+                const response = await fetch(base64);
+                const blob = await response.blob();
+                const namePhone = blob._data.name;
+                const typeIm = blob._data.type
+
+                const base64Phone = `data:${typeIm};base64,${resultLaunch.base64}`;
+                base64ToFile(base64Phone, namePhone)
+                const base64ImageContent = base64Phone.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+                const arr = base64Phone.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    ext = arr[0].match(/:image\/(.*?);/)[1];
+
+                const file = base64ToFile(base64Phone, 'filename.' + ext);
+
+                const formData = new FormData();
+
+                formData.append('file', base64Phone);
+                formData.append('itemId', props.route.params.itemId);
+                formData.append('checkId', props.route.params.checkId);
+
+                return {
+                    pickImageChoose: props.navigation.navigate('Редактировать проверку', {
+                        formData
+                    })
+                };
+
+            }
+
+            base64ToFile(base64, name)
+
+            const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+            const arr = base64.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                ext = arr[0].match(/:image\/(.*?);/)[1];
+
+            const file = base64ToFile(base64, 'filename.' + ext);
+
+            const formData = new FormData();
+            formData.append('file', base64);
+            formData.append('itemId', props.route.params.itemId);
+            formData.append('checkId', props.route.params.checkId);
+
+            return {
+                pickImageChoose: props.navigation.navigate('Редактировать проверку', {
+                    formData
+                })
+            };
+
         };
+
+
+
+
+
         const takePhotoFromCamera = () => {
             ImagePicker.openCamera({
                 width: 300,
@@ -136,7 +206,7 @@ const CheckEditing = (props) => {
 
             const HandleInputChange = event => setText(event.nativeEvent.text);
 
-            ///console.log(props.data);
+
             const renderInner = () => (
                 <View style={styles.panel}>
                     {/*<View>
@@ -170,8 +240,7 @@ const CheckEditing = (props) => {
 
             const bs = React.createRef()
             const fall = new Animated.Value(1);
-debugger;
-
+            debugger;
 
 
             return props.tree.children.map((value, index) => {
@@ -185,16 +254,20 @@ debugger;
                                         <View>
 
                                             <View>
+
+                                                {!!props.results[props.route.params.itemId].files &&
                                                 <View>
                                                     <EnterPictures {...props}/>
                                                 </View>
+                                                }
                                                 <View>
-                                                    <Text>{value2.name}</Text>
+                                                    <Text
+                                                        style={{paddingLeft: 10, paddingRight: 10}}>{value2.name}</Text>
                                                 </View>
-                                                <View style={{padding: 20}}>
+                                                <View style={{padding: 10}}>
                                                     <EnterComments {...props}/>
                                                 </View>
-                                                <View style={{padding: 50}}>
+                                                <View style={{padding: 10}}>
                                                     <EnterCoefficientPicker {...props}/>
                                                 </View>
                                             </View>
@@ -214,19 +287,20 @@ debugger;
                                             }}>
                                                 <View style={{alignContent: 'center'}}>
                                                     <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
-                                                        <View style={{
+                                                        <View /*style={{
                                                             height: 200,
-                                                            //width: 700,
                                                             borderRadius: 15,
                                                             justifyContent: 'center',
                                                             alignItems: 'center',
-                                                        }}>
+                                                        }}*/
+                                                            style={styles.touchableOpacity}
+                                                        >
 
                                                             <ImageBackground
-                                                                source={{
-                                                                    //uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'
-                                                                }}
-                                                                style={{ height: 10, /*width: width*/ }}
+                                                                source={
+                                                                    {/*uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Approve_icon.svg/1200px-Approve_icon.svg.png'*/}
+                                                                }
+                                                                style={{height: 10, /*width: width*/}}
                                                                 imageStyle={{borderRadius: 15}}
                                                             >
                                                                 <View style={{
@@ -234,14 +308,15 @@ debugger;
                                                                     justifyContent: 'center',
                                                                     alignItems: 'center'
                                                                 }}>
-                                                                    <Icon name="camera" size={55} color="#000" style={{
-                                                                        opacity: 0.7,
-                                                                        alignItems: 'center',
-                                                                        justifyContent: 'center',
-                                                                        borderWidth: 1,
-                                                                        borderColor: '#000',
-                                                                        borderRadius: 10,
-                                                                    }}/>
+                                                                    <Icon name="camera" size={35} color="#ffffff"
+                                                                          style={{
+                                                                              opacity: 0.9,
+                                                                              alignItems: 'center',
+                                                                              justifyContent: 'center',
+                                                                              //borderWidth: 1,
+                                                                              borderColor: '#ffffff',
+                                                                              borderRadius: 10,
+                                                                          }}/>
                                                                 </View>
                                                             </ImageBackground>
 
@@ -271,7 +346,16 @@ debugger;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //height: 1024
+    },
+    touchableOpacity: {
+        //width: '100%',
+        backgroundColor: '#eb2d93',
+        alignSelf: 'stretch',
+        borderRadius: 10,
+        paddingBottom: 20,
+        paddingTop: 20,
+        marginLeft: 10,
+        marginRight: 10
     },
     containerSlider: {
         marginTop: 0,
@@ -286,7 +370,6 @@ const styles = StyleSheet.create({
     },
     textInput: {
         flex: 1,
-        //marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
     },
@@ -303,7 +386,6 @@ const styles = StyleSheet.create({
         shadowOffset: {width: -1, height: -3},
         shadowRadius: 2,
         shadowOpacity: 0.4,
-        // elevation: 5,
         paddingTop: 20,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
@@ -322,12 +404,6 @@ const styles = StyleSheet.create({
         padding: 40,
         backgroundColor: '#FFFFFF',
         paddingTop: 20,
-        // borderTopLeftRadius: 20,
-        // borderTopRightRadius: 20,
-        // shadowColor: '#000000',
-        // shadowOffset: {width: 0, height: 0},
-        // shadowRadius: 5,
-        // shadowOpacity: 0.4,
     },
     panelTitle: {
         fontSize: 27,
@@ -349,8 +425,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
         textAlign: 'center'
-    },
-
+    }
 })
 
 export default CheckEditing;
