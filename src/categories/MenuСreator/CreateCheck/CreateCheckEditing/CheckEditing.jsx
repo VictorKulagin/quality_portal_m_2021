@@ -45,12 +45,14 @@ const CheckEditing = (props) => {
 
         const pickImage = async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
-                exif: true,
-                allowsEditing: false,
-                quality: 0.7,
-                base64: true
+                 exif: true,
+                 allowsEditing: false,
+                 quality: 0.7,
+                 base64: true
 
             });
+
+            console.log(result);
 
             let base64 = result.uri;
 
@@ -62,14 +64,19 @@ const CheckEditing = (props) => {
                 const namePhone = blob._data.name;
                 const typeIm = blob._data.type
 
-                const base64Phone = `data:${typeIm};base64,${result.base64}`;
-                base64ToFile(base64Phone, namePhone)
-                const base64ImageContent = base64Phone.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-                const arr = base64Phone.split(','),
-                    mime = arr[0].match(/:(.*?);/)[1],
-                    ext = arr[0].match(/:image\/(.*?);/)[1];
 
-                const file = base64ToFile(base64Phone, 'filename.' + ext);
+                const base64Phone = `data:${typeIm};base64,${result.base64}`;
+
+                console.log({base64Phone});
+
+
+                // base64ToFile(base64Phone, namePhone)
+                // const base64ImageContent = base64Phone.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+                // const arr = base64Phone.split(','),
+                //     mime = arr[0].match(/:(.*?);/)[1],
+                //     ext = arr[0].match(/:image\/(.*?);/)[1];
+                //
+                // const file = base64ToFile(base64Phone, 'filename.' + ext);
 
                 const formData = new FormData();
 
@@ -85,14 +92,15 @@ const CheckEditing = (props) => {
 
             }
 
-            base64ToFile(base64, name)
+            // base64ToFile(base64, name)
 
-            const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-            const arr = base64.split(','),
-                mime = arr[0].match(/:(.*?);/)[1],
-                ext = arr[0].match(/:image\/(.*?);/)[1];
+            // const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+            // const arr = base64.split(','),
+            //     mime = arr[0].match(/:(.*?);/)[1],
+            //     ext = arr[0].match(/:image\/(.*?);/)[1];
 
-            const file = base64ToFile(base64, 'filename.' + ext);
+            // const file = base64ToFile(base64, 'filename.' + ext);
+            console.log({base64});
 
             const formData = new FormData();
             formData.append('file', base64);
@@ -109,17 +117,23 @@ const CheckEditing = (props) => {
 
 
         const pickImageAllow = async () => {
+            debugger;
             let resultLaunch = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                // mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                // exif: true,
+                // allowsEditing: true,
+                // aspect: [4, 3],
+                // quality: 0.5,
+                // base64: true
                 exif: true,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
+                allowsEditing: false,
+                quality: 0.7,
                 base64: true
             });
             debugger;
+
             //let base64 = result.uri;
-            console.log(resultLaunch.uri);
+            // console.log(resultLaunch.uri);
 
             let base64 = resultLaunch.uri
 
@@ -131,21 +145,24 @@ const CheckEditing = (props) => {
                 const blob = await response.blob();
                 const namePhone = blob._data.name;
                 const typeIm = blob._data.type
+                debugger;
 
                 const base64Phone = `data:${typeIm};base64,${resultLaunch.base64}`;
-                base64ToFile(base64Phone, namePhone)
-                const base64ImageContent = base64Phone.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-                const arr = base64Phone.split(','),
-                    mime = arr[0].match(/:(.*?);/)[1],
-                    ext = arr[0].match(/:image\/(.*?);/)[1];
+                // base64ToFile(base64Phone, namePhone)
+                // const base64ImageContent = base64Phone.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+                // const arr = base64Phone.split(','),
+                //     mime = arr[0].match(/:(.*?);/)[1],
+                //     ext = arr[0].match(/:image\/(.*?);/)[1];
 
-                const file = base64ToFile(base64Phone, 'filename.' + ext);
+                // const file = base64ToFile(base64Phone, 'filename.' + ext);
+                debugger;
 
                 const formData = new FormData();
 
                 formData.append('file', base64Phone);
                 formData.append('itemId', props.route.params.itemId);
                 formData.append('checkId', props.route.params.checkId);
+                debugger;
 
                 return {
                     pickImageChoose: props.navigation.navigate('Редактировать проверку', {
@@ -155,14 +172,14 @@ const CheckEditing = (props) => {
 
             }
 
-            base64ToFile(base64, name)
+            // base64ToFile(base64, name)
+            //
+            // const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+            // const arr = base64.split(','),
+            //     mime = arr[0].match(/:(.*?);/)[1],
+            //     ext = arr[0].match(/:image\/(.*?);/)[1];
 
-            const base64ImageContent = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-            const arr = base64.split(','),
-                mime = arr[0].match(/:(.*?);/)[1],
-                ext = arr[0].match(/:image\/(.*?);/)[1];
-
-            const file = base64ToFile(base64, 'filename.' + ext);
+            // const file = base64ToFile(base64, 'filename.' + ext);
 
             const formData = new FormData();
             formData.append('file', base64);
@@ -251,10 +268,9 @@ const CheckEditing = (props) => {
                             return (
                                 <>
                                     {(value2.id == props.route.params.itemId) ?
+
                                         <View>
-
                                             <View>
-
                                                 {!!props.results[props.route.params.itemId].files &&
                                                 <View>
                                                     <EnterPictures {...props}/>

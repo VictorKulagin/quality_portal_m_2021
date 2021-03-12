@@ -6,6 +6,7 @@ import {connect} from "react-redux"
 import {
     getCheckThunkCreatorEdition, getCoefficientThunkEditingAPI, getFilesThunkEditingAPI, getTextThunkEditingAPI
 } from "../../../../redux/check-editing-reducer";
+import CreateCheck from "../CreateCheck";
 
 
 YellowBox.ignoreWarnings([
@@ -52,7 +53,8 @@ const CheckEditingContainer = (props) => {
 
     console.log(props);
     debugger
-    return <CheckEditing {...props} />
+    return  <CheckEditing {...props} />
+
 
 };
 

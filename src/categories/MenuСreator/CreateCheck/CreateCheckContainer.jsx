@@ -2,13 +2,14 @@ import React, {useEffect} from 'react';
 import CreateCheck from "./CreateCheck";
 import {connect} from "react-redux"
 import {
-    getCreateCheckThunkCreator,
+    getCreateCheckThunkCreator, getEndCheckThunk,
     getViewCreateCheckThunkCreatorText, getViewCreateCheckThunkHistoryText,
     getViewHistoryCheckThunkShow
 } from "../../../redux/create-check-reducer";
 
 {/*Убираеm WAR Recycle cykle*/}
 import { YellowBox } from 'react-native'
+import {getCoefficientThunkEditingAPI, getTextThunkEditingAPI} from "../../../redux/check-editing-reducer";
 YellowBox.ignoreWarnings([
     'Require cycle:'
 ])
@@ -50,6 +51,28 @@ const CreateCheckContainer = (props) => {
         }
     }, [props.route.params?.parentId, props.route.params?.checkId]);
 
+
+    useEffect(() => {
+        debugger;
+        if(props.route.params?.EndCheckTrue && props.route.params?.EndParentId && props.route.params?.EndCheckId){
+            props.getEndCheckThunk(props.route.params?.EndCheckTrue, props.route.params?.EndParentId, props.route.params?.EndCheckId);
+        } else if(props.route.params?.EndCheckTrue === false) {
+            props.getEndCheckThunk(props.route.params?.EndCheckTrue, props.route.params?.EndParentId, props.route.params?.EndCheckId);
+        }
+    }, [props.route.params?.EndCheckTrue, props.route.params?.EndParentId, props.route.params?.EndCheckId]);
+
+
+    /**************************************/
+    /*useEffect(() => {
+        debugger;
+        if(props.route.params?.value && props.route.params?.itemId && props.route.params?.checkId){
+            debugger;
+            props.getCoefficientThunkEditingAPI(props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId);
+        }
+    }, [props.route.params?.value, props.route.params?.itemId, props.route.params?.checkId]);*/
+
+
+
     console.log({props:props})
 
     //props.check, props.check_id, props.getCreateCheckThunkCreator, props.navigation, props.parent_id, props.route, props.tree
@@ -70,11 +93,14 @@ let mapStateToProps = (state) => {
 
         parent_id: state.createCheckReducer.parent_id,
         check_id: state.createCheckReducer.check_id,
-        id: state.createCheckReducer.id
+        id: state.createCheckReducer.id,
+        alertendresult: state.createCheckReducer.alertendresult,
+
+        //resultsE: state.checkEditingReducer.results,
 
     }
 }
 
 export default connect(mapStateToProps, {
-    getCreateCheckThunkCreator, getViewCreateCheckThunkCreatorText, getViewHistoryCheckThunkShow, getViewCreateCheckThunkHistoryText
+    getCreateCheckThunkCreator, getViewCreateCheckThunkCreatorText, getViewHistoryCheckThunkShow, getViewCreateCheckThunkHistoryText, getEndCheckThunk, getCoefficientThunkEditingAPI
 })(CreateCheckContainer);

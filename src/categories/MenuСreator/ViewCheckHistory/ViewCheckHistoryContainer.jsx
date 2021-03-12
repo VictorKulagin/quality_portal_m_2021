@@ -34,7 +34,8 @@ let mapStateToProps = (state) => {
     return {
         result: state.viewCheckHistoryReducer.result,
         model: state.viewCheckHistoryReducer.model,
-        id: state.viewCheckHistoryReducer.id
+        id: state.viewCheckHistoryReducer.id,
+        results: state.checkEditingReducer.results,
 
     }
 }

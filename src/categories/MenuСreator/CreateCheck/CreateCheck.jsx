@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useMemo} from 'react'
 
 //import '../../../common/grid.css'; //Import here your file style
 
@@ -10,20 +10,32 @@ import {
     Text,
     StyleSheet,
     SafeAreaView,
-    Dimensions, TouchableOpacity
+    Dimensions,
+    TouchableOpacity,
+    Alert
 } from "react-native";
 
 import {DataTable} from 'react-native-paper';
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/TouchableRipple";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { useIsFocused } from '@react-navigation/native';
+//import { NavigationActions } from 'react-navigation';
 
 const CreateCheck = (props) => {
 
-    debugger;
+    const isFocused = useIsFocused();
+
+
+
+    /*const doubleEnterCoefficientResult = useMemo(() => {
+        return EnterCoefficientResult()
+    }, [])*/
 
     function GetTreeText({id}) {
-        if (props.results !== undefined) {
+
+        //console.log(`${props.results[id].text} "TEXT"`);
+        if (props.results !== undefined && props.results.length !== 0 && props.results[id].text !== undefined) {
+
             return (
                 <>
                     <View style={{width: OptionCellComment}}>
@@ -31,16 +43,31 @@ const CreateCheck = (props) => {
                     </View>
                 </>
             )
+        } else {
+            return (
+                <>
+                    <View style={{width: OptionCellComment}}>
+                        <Text>{"Текст замечания к пункту проверки Обязателен при оценке 0.5-0.9"}</Text>
+                    </View>
+                </>
+            )
         }
         return null
     }
 
+
+
     function GetTreeItems() {
+
         if (props.tree.children !== undefined) {
+
+
             //const [valueText, setText] = useState('');
             //const HandleInputChange = event => setText(event.nativeEvent.text);
             ///console.log(props.data);
+
             return props.tree.children.map((value, index) => {
+                debugger;
                 return (
                     <>
                         <DataTable.Header style={styles.bgColor}>
@@ -81,8 +108,15 @@ const CreateCheck = (props) => {
 
                                     <TouchableRipple
                                         style={{width: CoefficientCellDescription, justifyContent: 'center'}}>
-                                        <Text style={{textAlign: 'center'}}>1</Text>
+                                        <Text style={{textAlign: 'center'}}
+                                            onPress={() => props.navigation.navigate('Редактировать проверку', {
+                                                itemId: value2.id,
+                                                checkId: props.check.id,
+                                                parentId: props.route.params.parentId
+                                        })}>{/*props.results[11241].coefficient.value*/EnterCoefficientResult(value2.id)/*isFocused ? EnterCoefficientResult(value2.id) : EnterCoefficientResult(value2.id)*/}</Text>
+
                                     </TouchableRipple>
+
                                 </DataTable.Row>
                             )
                         }) : ''}
@@ -94,13 +128,141 @@ const CreateCheck = (props) => {
         return null
     }
 
+    const EnterCoefficientResult = (id) => {
+        debugger;
+        if (props.results.length !== 0) {
+
+                if (props.results[id].coefficient !== undefined) {
+                    if(props.check.id === props.results[id].coefficient.check_id){
+                    console.log(`${id} : ${props.results[id].coefficient.value} : RES`)
+                    return props.results[id].coefficient.value;
+                }
+            }
+        }
+        return null
+    }
+
+    const EndCheckTrue = () => {
+        // const even = (element) => element < 1;
+
+        if (props.results.length !== 0) {
+            for (let key in props.results) {
+
+                if(props.results[key].coefficient !== undefined){
+                    if(props.results.hasOwnProperty(key)){
+                        console.log(`${key} : ${props.results[key].coefficient.value}`)
+                    }
+                }
+
+                if(props.results[key].text !== undefined){
+                    if(props.results.hasOwnProperty(key)){
+                        console.log(`${key} : ${props.results[key].text.text}`)
+                    }
+                }
+
+                function coefficientR() {
+                    if (props.results[key].coefficient.value < 1) {
+                        console.log(false)
+                        return false;
+                    } else {
+                        console.log(true)
+                        return true;
+                    }
+                }
+
+                function textR() {
+                    if (props.results[key].text === undefined) {
+                        console.log(false)
+                        return false;
+                    } else {
+                        console.log(true)
+                        return true;
+                    }
+                }
+
+                if (coefficientR() === false && textR() === false) {
+                    if (props.tree.children !== undefined) {
+                        props.tree.children.map((value, index) => {
+                            if (value.name !== undefined) {
+                                value.children.map((value2, index2) => {
+                                    if (value2.id == key) {
+                                        console.log(value2.name + " 11111");
+                                        Alert.alert(value2.name);
+                                        console.log(false);
+                                        return false;
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }
+                if (coefficientR() === false && textR() === false) {
+                    console.log(false + 'EndCheckTrue')
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    const AlertEndCheckTrue = (bool) => {
+        if(bool !== 'success'){
+
+            if (props.results.length !== 0) {
+                for (let key in props.results) {
+
+                    function coefficientR() {
+                        if (props.results[key].coefficient.value < 1) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+
+                    function textR() {
+                        if (props.results[key].text === undefined) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+
+                    if (coefficientR() === false && textR() === false) {
+                        if (props.tree.children !== undefined) {
+                            props.tree.children.map((value, index) => {
+                                if (value.name !== undefined) {
+                                    value.children.map((value2, index2) => {
+                                        if (value2.id == key) {
+                                            //console.log(value2.name + " 11111");
+                                            console.log(value2.name);
+                                            return Alert.alert(value2.name);
+                                            //console.log(false);
+                                            //return false;
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     function EndCheck() {
         return (
             <View>
                 <View>
-                    <TouchableOpacity onPress={() => alert("Завершить проверку")} style={styles.touchableOpacity}>
+                    <TouchableOpacity onPress={() => props.navigation.navigate('Создать проверку', {
+                        EndCheckTrue: EndCheckTrue(),
+                        EndCheckId: props.check.id,
+                        EndParentId: (props.route.params.parentId !== undefined) ? props.route.params.parentId : props.route.params.parent_id_ })}
+                        style={styles.touchableOpacity}>
+
                         <Text style={styles.touchableOpacityText}>Завершить проверку</Text>
-                        <Text>{`${props.route.params.parentId}  ${props.route.params.checkId}`}</Text>
+                        <Text>{`${(props.route.params.parentId !== undefined) ? props.route.params.parentId : props.route.params.parent_id_}  ${props.check.id}`}</Text>
+
                     </TouchableOpacity>
                 </View>
                 <View>
@@ -123,6 +285,7 @@ const CreateCheck = (props) => {
 
     console.log(OptionCellDescription);
     console.log(CameraCellDescription);
+    console.log(EndCheckTrue());
 
     return (
         <View style={styles.container}>
@@ -168,11 +331,22 @@ const CreateCheck = (props) => {
                             <DataTable.Title><Text style={styles.tableWorld}>Дата проверки</Text></DataTable.Title>
                             <DataTable.Title>{props.check.date}</DataTable.Title>
                         </DataTable.Header>
+
+
+
+                        <DataTable.Header>
+                            <DataTable.Title><Text style={styles.tableWorld}>Дата проверки</Text></DataTable.Title>
+                            <DataTable.Title>{props.check.id}</DataTable.Title>
+                        </DataTable.Header>
+
+
+
                     </DataTable>
 
                     <DataTable style={{paddingTop: 20}}>
                         <GetTreeItems/>
                         <EndCheck/>
+                        {/*<EndCheckTrue/>*/}
                     </DataTable>
                 </ScrollView>
             </SafeAreaView>

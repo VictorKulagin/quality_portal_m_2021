@@ -21,7 +21,7 @@ console.log(props.model);
                return <>
                    <DataTable.Header style={styles.bgColor}>
                        <DataTable.Title numberOfLines={8}>
-                           <Text key={index} style={[styles.bgColor, {fontSize: 16}]}
+                           <Text key={index} style={[styles.bgColorData, {fontSize: 16}]}
 
                                  onPress={() => props.navigation.navigate('Создать проверку', {
                                      parentId: value.company_id,
@@ -129,8 +129,10 @@ const styles = StyleSheet.create({
 
     },
     bgColor: {
-
         backgroundColor: '#ffffff',
+    },
+    bgColorData: {
+        color: '#ef0505',
     },
     viewStatus: {
         width: '100%',

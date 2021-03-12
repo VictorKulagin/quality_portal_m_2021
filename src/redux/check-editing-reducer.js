@@ -52,7 +52,10 @@ debugger;
 
             newResults = {...newResults, [item_id.itemId]: item_results}
 
+            console.log(newResults + " SSS");
             return { ...state,  results: newResults/*[11241].files*/ }
+
+
 
             //console.log(item_id.itemId + " SSS");
 

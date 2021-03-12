@@ -13,7 +13,8 @@ export const TokenConfig = {
 }
 
 const config = {
-    baseURL: 'http://109.73.14.239/',
+    // baseURL: 'http://109.73.14.239/',
+    baseURL: 'https://qs.marinsgroup.ru/',
     //timeout: 5000,
 
     /*data: {
@@ -78,8 +79,9 @@ export const CreateCheckAPI = {
 }
 
 export const EndCheckAPI = {
-    EndCheckAPI(parentIdCheck, checkId) {
-        return instance.get(`api/check/finish?parent_id=${parentIdCheck}&check_id=${checkId}&access-token=`+ config.accessTocken);
+    EndCheckAPI(EndParentId, EndCheckId) {
+        debugger;
+        return instance.get(`api/check/finish?parent_id=${EndParentId}&check_id=${EndCheckId}&access-token=`+ config.accessTocken);
     }
 }
 

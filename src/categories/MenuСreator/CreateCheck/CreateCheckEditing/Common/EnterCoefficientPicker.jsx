@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 
 import {ModalPicker} from './InsideEnterCoefficientPicker/ModalPicker'
+import {Button} from "react-native-paper";
 
 
 const EnterCoefficientPicker = (props) => {
@@ -22,6 +23,15 @@ const EnterCoefficientPicker = (props) => {
             itemId: props.route.params.itemId,
             checkId: props.route.params.checkId})
     }
+
+    /*const setData2 = (option) => {
+        props.navigation.navigate('Создать проверку', {
+            parentId:  props.route.params.parentId,
+            checkId: props.route.params.checkId
+        })
+    }*/
+
+
     return(
         <SafeAreaView style={styles.container}>
             <TouchableOpacity
@@ -43,6 +53,7 @@ const EnterCoefficientPicker = (props) => {
                     setData={setData}
                 />
             </Modal>
+
         </SafeAreaView>
     )
 };
