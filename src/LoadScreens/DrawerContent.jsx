@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
     Drawer,
@@ -11,10 +11,27 @@ import {
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SignInScreenContainer from "./SignInScreenContainer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function DrawerContent(props) {
-    debugger;
-    //console.log(props);
+
+    const remove = async  () => {
+        try {
+            await AsyncStorage.removeItem('key_user')
+            await AsyncStorage.removeItem('key_password')
+
+            if(props.username !== null && props.password !== null) {
+                setTimeout(() => props.navigation.navigate('SignInScreenContainer'), 0);
+            }
+
+        } catch (err) {
+            alert(err)
+        } finally {
+            //setUser();
+            //setPassword();
+        }
+    }
+
     return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -47,7 +64,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Выйти"
-                    onPress={() => props.navigation.navigate('SignInScreenContainer')}
+                    onPress={() => remove()}
                 />
             </Drawer.Section>
         </View>

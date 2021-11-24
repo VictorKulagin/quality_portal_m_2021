@@ -27,38 +27,9 @@ YellowBox.ignoreWarnings(['Remote debugger']);
 
 const SignInScreen = (props) => {
 
-    /*const Redirect = {
-        MaimPage(props) {
-            setTimeout(() => props.navigation.navigate('SignInScreenContainer'), 0);
-        }
-    }*/
     debugger;
     const [data, setData] = React.useState({check_textInputChange: false, secureTextEntry: true});
 
-    debugger;
-    /*const textInputChange = (val) => {
-        if( val.length != 0 ) {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: true
-            });
-        } else {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: false
-            });
-        }
-    }*/
-
-    /*const handlePasswordChange = (val) => {
-        setData({
-            ...data,
-            password: val
-        });
-    }*/
-    debugger;
     const updateSecureTextEntry = () => {
         setData({
             ...data,
@@ -66,18 +37,11 @@ const SignInScreen = (props) => {
         });
     }
 
-    /*const loginHandle = (username, password) => {
-        signIn(username, password);
-    }*/
-
     const [username, setUser] = useState('');
     const [password, setPassword] = useState('');
 
-    /*if(props.exit === true){
-        setTimeout(() => props.navigation.navigate('SignInScreenContainer'), 0);
-    }*/
 
-    /*const save = async() => {
+    const save = async() => {
         debugger;
         try {
             await AsyncStorage.setItem('key_user', username);
@@ -108,27 +72,9 @@ const SignInScreen = (props) => {
         }
     }
 
-    const remove = async  () => {
-        try {
-            await AsyncStorage.removeItem('key_user')
-            await AsyncStorage.removeItem('key_password')
-
-        } catch (err) {
-            alert(err)
-        } finally {
-            setUser();
-            setPassword();
-        }
-    }
-
     useEffect(() => {
             load();
-        if(!username && !password){
-            remove();
-        }
-    }, []);*/
-
-
+    }, []);
 
     debugger;
     return (
@@ -153,7 +99,6 @@ const SignInScreen = (props) => {
                         style={styles.textInput}
                         autoCapitalize="none"
                         keyboardType="email-address"
-                        /*onChangeText={(val) => textInputChange(val)}*/
                         onChangeText={text => setUser(text)}
                     />
                     {data.check_textInputChange ?
@@ -183,7 +128,6 @@ const SignInScreen = (props) => {
                         secureTextEntry={data.secureTextEntry ? true : false}
                         style={styles.textInput}
                         autoCapitalize="none"
-                        /*onChangeText={(val) => handlePasswordChange(val)}*/
                         onChangeText={text => setPassword(text)}
                     />
                     <TouchableOpacity onPress={updateSecureTextEntry}>
@@ -215,11 +159,7 @@ const SignInScreen = (props) => {
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
-                        onPress={() => props.navigation.navigate('SignInScreenContainer', {
-                            username: username,
-                            password: password
-                        })}
-                        //onPress={() => save()}
+                        onPress={() => save()}
                     >
                         <LinearGradient
                             colors={['#eb2d93', '#964c7e']}
@@ -234,8 +174,7 @@ const SignInScreen = (props) => {
 
                     <View>
                         <Text>
-                            {(props.status && props.exit === false/*&& props.route.params?.username != undefined && props.route.params?.password != undefined*/ /* && props.access_token != null*/) ? props.navigation.replace('Предприятия') : "Не верный логин пароль"}
-                            {/*(props?.access_token === null) ? props.navigation.replace('SignInScreenContainer') : []*/}
+                            {(props.status && props.exit === false) ? props.navigation.replace('Предприятия') : "Не верный логин пароль"}
                         </Text>
                     </View>
 
