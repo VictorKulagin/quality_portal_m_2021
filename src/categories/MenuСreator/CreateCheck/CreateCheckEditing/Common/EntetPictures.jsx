@@ -98,7 +98,7 @@ const EnterPictures = (props) => {
                                         </SafeAreaView>
                                    </Modal>
 
-                                    <Icon key={value.id} name="delete-circle" size={32} color='#eb2d93'
+                                    <Icon key={value.id} name="delete" size={32} color='#eb2d93'
                                           onPress={ () => props.navigation.navigate('Редактировать проверку', {
                                                   itemId: value.item_id,
                                                   checkId: value.check_id,
@@ -108,13 +108,14 @@ const EnterPictures = (props) => {
                                           style={{
                                               position: 'absolute',
                                               opacity: 0.8,
+                                              right: 10,
                                               borderColor: '#eb2d93',
-                                              borderRadius: 12,
+                                              //borderRadius: 12,
                                               zIndex: 10
                                           }}
                                     />
 
-                                    <Icon key={Math.random().toString(36).substr(2, 9)} name="magnify-scan" size={32} color='#eb2d93'
+                                    <Icon key={Math.random().toString(36).substr(2, 9)} name="magnify-plus" size={32} color='#eb2d93'
                                           onPress={ () => {
                                               setModalWindow(true)
                                               setModalFile((actual) => actual = value.file_name)
@@ -122,9 +123,15 @@ const EnterPictures = (props) => {
                                           style={{
                                               position: 'absolute',
                                               opacity: 0.8,
-                                              right: 10,
+                                              //right: 10,
                                               borderColor: '#eb2d93',
-                                              borderRadius: 12,
+                                              //borderRadius: 12,
+                                              top: '50%',
+                                              left: '50%',
+                                              transform: [
+                                                  {translateX: -10},
+                                                  {translateY: -10},
+                                              ],
                                               zIndex: 10
                                           }}
                                     />
