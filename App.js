@@ -77,7 +77,7 @@ const CategoriesStackScreen = ({navigation}) => (
    }}/>
 
    <CategoriesStack.Screen name="Предприятия" component={CategoriesContainer} options={{
-    title: 'Предприятия',
+    title: '',
     headerLeft: () => (
     <Icon.Button name="menu" size={25}
     backgroundColor="#eb2d93" onPress={() => navigation.openDrawer()}></Icon.Button>
