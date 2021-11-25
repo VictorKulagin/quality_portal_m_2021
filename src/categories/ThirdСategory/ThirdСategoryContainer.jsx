@@ -6,14 +6,10 @@ import {connect} from "react-redux"
 import * as axios from "axios";
 import {getThirdCategoriesThunkCreator} from "../../redux/third-category-reducer";
 
-/*import mapStateToProps from "react-redux/lib/connect/mapStateToProps";
-import mapDispatchToProps from "react-redux/lib/connect/mapDispatchToProps";*/
-//debugger;
-const ThirdCategoriesContainer = (props) =>  {
-    //debugger;
-    useEffect(() => {
-        //debugger;
 
+const ThirdCategoriesContainer = (props) =>  {
+
+    useEffect(() => {
         /*axios.get("http://109.73.14.239/api/categories")
             .then(response => {
                 debugger;
@@ -21,6 +17,11 @@ const ThirdCategoriesContainer = (props) =>  {
             });*/
         props.getThirdCategoriesThunkCreator(props.route.params.name.id);
     }, [] );
+
+
+    useEffect(() =>{
+        setTimeout(() => props.navigation.setOptions({ title: "ТЦ " + props.route.params.name.title }), 0);
+    }, [])
 
     //debugger;
     return <ThirdCategory {...props} />
@@ -32,19 +33,8 @@ let mapStateToProps = (state) => {
     //debugger
     return {
         categories: state.thirdCategoriesReducer.categories
-        //CategoriesStackScreen: CategoriesStackScreen
     }
 }
-
-/*let mapDispatchToProps = (dispatch) => {
-    return {
-        setCategories: (categories) => {
-            dispatch(setCategoriesAC(categories));
-        }
-    }
-}*/
-
-
 
 export default connect(mapStateToProps, {
     getThirdCategoriesThunkCreator

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {TouchableOpacity, View, Text, StyleSheet, Button, SafeAreaView, FlatList} from "react-native";
 
 const MenuCreator = (props) => {
@@ -14,14 +14,15 @@ const MenuCreator = (props) => {
 
     const onPress = () => console.log('111')
 
-
-
+    useEffect(() =>{
+        setTimeout(() => props.navigation.setOptions({ title: props.route.params.name.title }), 0);
+    }, [])
 
    const buttons = [
         { id: '1', title: 'Создать проверку', onPress: onPress},
         { id: '2', title: 'Посмотреть историю проверок', onPress: onPress },
-        { id: '3', title: 'Посмотреть журнал поручений' },
-        { id: '4', title: 'Редактировать проверочный список' }
+        /*{ id: '3', title: 'Посмотреть журнал поручений' },
+        { id: '4', title: 'Редактировать проверочный список' }*/
     ];
 
 

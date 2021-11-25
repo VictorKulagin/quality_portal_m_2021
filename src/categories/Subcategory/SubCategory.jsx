@@ -1,14 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {TouchableOpacity, View, Text, StyleSheet, Button, SafeAreaView, FlatList, Alert} from "react-native";
 
-//debugger;
-const SubCategory = (props) => {
-//debugger;
 
-    {/*<View>
-           <Text>{props.route.params.name.id}</Text>
-        </View>*/}
-    debugger;
+const SubCategory = (props) => {
 
     return (
     <SafeAreaView style={styles.container}>

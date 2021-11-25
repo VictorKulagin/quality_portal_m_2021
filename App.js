@@ -84,7 +84,7 @@ const CategoriesStackScreen = ({navigation}) => (
          )
     }} />
 
-   <CategoriesStack.Screen name="Подкатегории" component={SubCategoriesContainer}/>
+   <CategoriesStack.Screen name="Подкатегории" component={SubCategoriesContainer} />
    <CategoriesStack.Screen name="Меню создатель" component={MenuCreatorContainer}/>
    <CategoriesStack.Screen name="Третья категория" component={ThirdCategoriesContainer}/>
    <CategoriesStack.Screen name="Создать проверку" component={CreateCheckContainer}/>
