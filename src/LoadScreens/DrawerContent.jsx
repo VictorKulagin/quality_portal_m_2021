@@ -36,20 +36,16 @@ export function DrawerContent(props) {
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
                 <View>
-                    <Text>Main Content</Text>
-                </View>
-                <View>
                     <Drawer.Section style={styles.drawerSection}>
                         <DrawerItem
                             icon={({color, size}) => (
                                 <Icon
-                                    name="logout"
+                                    name="emoticon-lol-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
-                            label="Выйти"
-                            onPress={() => props.navigation.navigate('SignInScreenContainer')}
+                            label="ФИО"
                         />
                     </Drawer.Section>
                 </View>
