@@ -19,6 +19,7 @@ debugger;
 
 const CreateCheckContainer = (props) => {
     debugger;
+
     useEffect(() => {
         debugger;
         props.getCreateCheckThunkCreator(props.route.params.parent_id_);
@@ -61,6 +62,10 @@ const CreateCheckContainer = (props) => {
             props.GetCoefficients(props.route.params?.checkId);
         }
     }, [props.route.params?.checkId]);
+
+    useEffect(() =>{
+        setTimeout(() => props.navigation.setOptions({ title: `Создать проверку ${ props.check?.company_id }` }), 0);
+    })
 
 
         return <CreateCheck {...props} />

@@ -126,7 +126,7 @@ const CreateCheck = (props) => {
                         }) : []}
                         <DataTable.Header>
                             <DataTable.Title numberOfLines={8}>
-                                <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за раздел: ${props.getResult.data.categories[value.id].toFixed(2)}` : '0'}</Text>
+                                <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за раздел: ${props?.getResult.data.categories[value.id].toFixed(2)}` : '0'}</Text>
                             </DataTable.Title>
                         </DataTable.Header>
                     </View>
@@ -155,7 +155,7 @@ const CreateCheck = (props) => {
                 <View>
                     <DataTable.Header style={styles.touchableOpacitySection}>
                         <DataTable.Title numberOfLines={8}>
-                            <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за проверку: ${props.getResult.data.common.toFixed(2)}` : '0'}</Text>
+                            <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за проверку: ${props.getResult.data.common?.toFixed(2)}` : '0'}</Text>
                         </DataTable.Title>
                     </DataTable.Header>
 

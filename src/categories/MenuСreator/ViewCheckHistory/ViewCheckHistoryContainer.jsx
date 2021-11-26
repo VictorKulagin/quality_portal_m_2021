@@ -6,6 +6,7 @@ import {
     View,
 } from "react-native";
 import {
+    categoryName,
     getEndCheckThunk, getThunkToggleIsFetching,
     getViewCheckThunkHistory,
     setDeleteViewCheckHistory
@@ -30,6 +31,11 @@ const ViewCheckHistoryContainer = (props) => {
         props.getViewCheckThunkHistory(parent_id_, props.route.params.IdView);
     }, [props.route.params.IdView] );
 
+    useEffect(() =>{
+        debugger;
+        setTimeout(() => props.navigation.setOptions({ title: `Просмотреть историю проверок ${props.categoryName}` }), 0);
+    });
+
     /*****-=Создать EndCheckTrue=-*****/
 
     return (
@@ -47,7 +53,8 @@ let mapStateToProps = (state) => {
         model: state.viewCheckHistoryReducer.model,
         id: state.viewCheckHistoryReducer.id,
         results: state.checkEditingReducer.results,
-        isFetching: state.viewCheckHistoryReducer.isFetching
+        isFetching: state.viewCheckHistoryReducer.isFetching,
+        categoryName: state.viewCheckHistoryReducer.categoryName
     }
 }
 

@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         //backgroundColor: '#ffffff',
     },
     bgColorData: {
-        color: '#ef0505',
+        color: '#d63886',
     },
     viewStatus: {
         width: '100%',
