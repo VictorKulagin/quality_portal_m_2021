@@ -5,7 +5,7 @@ import {
     GetCoefficients,
     getCreateCheckThunkCreator, getEndCheckThunk,
     getViewCreateCheckThunkCreatorText, getViewCreateCheckThunkHistoryText,
-    getViewHistoryCheckThunkShow
+    getViewHistoryCheckThunkShow, getSearchTextThunkCreator
 } from "../../../redux/create-check-reducer";
 
 {/*Убираеm WAR Recycle cykle*/}
@@ -24,6 +24,14 @@ const CreateCheckContainer = (props) => {
         debugger;
         props.getCreateCheckThunkCreator(props.route.params.parent_id_);
     }, [props.route.params.parent_id_]);
+
+
+    useEffect(() => {
+        debugger;
+        if(props.route.params?.searchText){
+            props.getSearchTextThunkCreator(props.route.params?.searchText);
+        }
+    }, [props.route.params?.searchText]);
 
     useEffect(() => {
         debugger
@@ -80,6 +88,7 @@ let mapStateToProps = (state) => {
         results: state.createCheckReducer.results,
         model: state.createCheckReducer.model,
         text: state.createCheckReducer.text,
+        searchText: state.createCheckReducer.searchText,
 
         parent_id: state.createCheckReducer.parent_id,
         check_id: state.createCheckReducer.check_id,
@@ -90,5 +99,5 @@ let mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-    getCreateCheckThunkCreator, getViewCreateCheckThunkCreatorText, getViewHistoryCheckThunkShow, getViewCreateCheckThunkHistoryText, getEndCheckThunk, getCoefficientThunkEditingAPI, GetCoefficients,
+    getCreateCheckThunkCreator, getViewCreateCheckThunkCreatorText, getViewHistoryCheckThunkShow, getViewCreateCheckThunkHistoryText, getEndCheckThunk, getCoefficientThunkEditingAPI, GetCoefficients, getSearchTextThunkCreator
 })(CreateCheckContainer);

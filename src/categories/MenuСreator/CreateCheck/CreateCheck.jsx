@@ -7,6 +7,7 @@ import {
     ScrollView,
     View,
     Text,
+    TextInput,
     StyleSheet,
     SafeAreaView,
     Dimensions,
@@ -23,6 +24,8 @@ import EndCheckTrue from "./CreateCheckEditing/Common/EndCheckTrue/EndCheckTrue"
 const CreateCheck = (props) => {
 
     debugger;
+
+    const [search, setsearch] = useState('');
 
     const isFocused = useIsFocused();
 
@@ -50,6 +53,68 @@ const CreateCheck = (props) => {
     }
 
 
+    const searchFilter = (searchText) => {
+            debugger;
+        if(searchText /*&& searchText.length >= 3*/) {
+
+            setTimeout(() => props.navigation.navigate('Создать проверку', {
+                //itemId: value2.id,
+                /*checkId: props.check.id,
+                parentId: props.route.params.parentId,*/
+                searchText: searchText
+            }), 0)
+            debugger;
+            /*const newData = props.tree.children.filter((value) => {
+                const itemData = value.name ?
+                    value.title.toUpperCase()
+                    : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > - 1;
+            });*/
+            /*setfilterdData(newData);
+            setsearch(text);*/
+            /*console.log(1);
+           return 1*/
+        //} else {
+            /*setfilterdData(masterData);
+            setsearch(text);*/
+            /*console.log(0);
+            return 0*/
+        //}
+        }
+
+        /*if(text) {
+            const newData = masterData.filter((item) => {
+                const itemData = item.title ?
+                    item.title.toUpperCase()
+                    : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > - 1;
+            });
+            setfilterdData(newData);
+            setsearch(text);
+        } else {
+            setfilterdData(masterData);
+            setsearch(text);
+        }*/
+    }
+
+
+    function Seach() {
+        return (<View>
+                        <View>
+                            <TextInput
+                                style={styles.textInputStyle}
+                                //value={search}
+                                placeholder="Введите текст"
+                                //underlineColorAndroid="transparent"
+                                //onChangeText={(text) => searchFilter(text)}
+                                onSubmitEditing={(searchText) => {searchFilter(searchText.nativeEvent.text)}}
+                            />
+                        </View>
+            </View>)
+        return null
+    }
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalText, setModalText] = useState('initText');
@@ -68,16 +133,14 @@ const CreateCheck = (props) => {
     }
 
     function GetTreeItems () {
-        if (props.tree.children !== undefined) {
-            return props.tree.children.map((value, index) => {
+        if (props.tree?.children !== undefined) {
+            return props.tree?.children.map((value, index) => {
                 //debugger;
                 return (
                     <View key={Math.random().toString(36).substr(2, 9)}>
-                        <DataTable.Header key={index} style={styles.bgColor}>
-                            <DataTable.Title numberOfLines={8}>
-                                <Text style={[styles.bgColor, {fontSize: 16}]}>{value.name}</Text>
-                            </DataTable.Title>
-                        </DataTable.Header>
+
+                        <NameTitle name={value.name} index={index}/>
+
                         {(value.name !== undefined) ? value.children.map((value2, index2) => {
                             return (
                                 <DataTable.Row key={Math.random().toString(36).substr(2, 10)} style={styles.dataTableRow}>
@@ -87,9 +150,10 @@ const CreateCheck = (props) => {
                                         </Text>
                                     </TouchableRipple>
 
-                                    <View>
-                                        <GetTreeText id={value2.id}/>
-                                    </View>
+                                        <View>
+                                            <GetTreeText id={value2.id}/>
+                                        </View>
+
                                     <TouchableRipple style={{width: CameraCellDescription, justifyContent: 'center'}}>
                                         <View>
                                             <View style={{position: 'absolute', top: -10, right: 25}}>
@@ -124,16 +188,46 @@ const CreateCheck = (props) => {
                                 </DataTable.Row>
                             )
                         }) : []}
-                        <DataTable.Header>
-                            <DataTable.Title numberOfLines={8}>
-                                <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за раздел: ${props?.getResult.data.categories[value.id].toFixed(2)}` : '0'}</Text>
-                            </DataTable.Title>
-                        </DataTable.Header>
+
+
+                        <AllCoeffForPats getResult={props.getResult} valueId={props?.getResult.data.categories[value.id]}/>
+
+
                     </View>
                 )
             })
         }
         return null
+    }
+
+
+    const NameTitle = ({name, index}) => {
+        if(name !== undefined) {
+            return (
+                <DataTable.Header key={index} style={styles.bgColor}>
+                    <DataTable.Title numberOfLines={8}>
+                        <Text style={[styles.bgColor, {fontSize: 16}]}>{name}</Text>
+                    </DataTable.Title>
+                </DataTable.Header>
+            )
+        } else  {
+            return null;
+        }
+    }
+
+
+    const AllCoeffForPats = ({getResult, valueId}) => {
+        if(valueId !== undefined) {
+            return(
+                <DataTable.Header>
+                    <DataTable.Title numberOfLines={8}>
+                        <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{getResult !== undefined && valueId ? `Коэффициент за раздел: ${valueId.toFixed(2)}` : '0'}</Text>
+                    </DataTable.Title>
+                </DataTable.Header>
+            )
+        } else {
+            return null;
+        }
     }
 
     const EnterCoefficientResult = (id) => {
@@ -194,7 +288,6 @@ const CreateCheck = (props) => {
     //debugger;
     return (
         <View style={styles.container}>
-
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
                     <DataTable>
@@ -206,25 +299,25 @@ const CreateCheck = (props) => {
 
                         <DataTable.Header>
                             <DataTable.Title><Text style={styles.tableWorld}>Дата проверки</Text></DataTable.Title>
-                            <DataTable.Title>{props.check.date}</DataTable.Title>
+                            <DataTable.Title>{props.check?.date}</DataTable.Title>
                         </DataTable.Header>
 
                         <DataTable.Header>
                             <DataTable.Title style={styles.tableWorld}><Text style={styles.tableWorld}>Версия
                                 проверочного списка</Text></DataTable.Title>
-                            <DataTable.Title>{props.check.check_list_version}</DataTable.Title>
+                            <DataTable.Title>{props.check?.check_list_version}</DataTable.Title>
                         </DataTable.Header>
 
                         <DataTable.Header>
                             <DataTable.Title style={styles.tableWorld}><Text style={styles.tableWorld}>Дата
                                 создания</Text></DataTable.Title>
-                            <DataTable.Title>{props.check.create_date}{" | "}{props.check.create_user}</DataTable.Title>
+                            <DataTable.Title>{props.check?.create_date}{" | "}{props.check?.create_user}</DataTable.Title>
                         </DataTable.Header>
 
                         <DataTable.Header>
                             <DataTable.Title style={styles.tableWorld}><Text
                                 style={styles.tableWorld}>Статус</Text></DataTable.Title>
-                            <DataTable.Title>{props.check.status_id}</DataTable.Title>
+                            <DataTable.Title>{props.check?.status_id}</DataTable.Title>
                         </DataTable.Header>
                     </DataTable>
 
@@ -235,10 +328,11 @@ const CreateCheck = (props) => {
 
                         <DataTable.Header>
                             <DataTable.Title><Text style={styles.tableWorld}>Дата проверки</Text></DataTable.Title>
-                            <DataTable.Title>{props.check.date}</DataTable.Title>
+                            <DataTable.Title>{props.check?.date}</DataTable.Title>
                         </DataTable.Header>
                     </DataTable>
                     <DataTable style={{paddingTop: 20}}>
+                        <Seach/>
                         <GetTreeItems/>
                         <EndCheck/>
                         {/*<EndCheckTrue/>*/}
@@ -427,6 +521,17 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 12,
         color: '#fff',
+    },
+
+    textInputStyle: {
+        height: 50,
+        width: Dimensions.get('window').width,
+        borderWidth: 1,
+        paddingLeft: 20,
+        marginTop: 1,
+        marginBottom: 20,
+        borderColor: '#eb2d93',
+        backgroundColor: 'white'
     }
 
 

@@ -1,6 +1,5 @@
-import {CreateCheckAPI, DelPictureApi, EndCheckAPI} from "../api/api";
 /***********/
-import {DataEditingAPI} from "../api/api";
+import {CreateCheckAPI, DataEditingAPI, DelPictureApi, EndCheckAPI} from "../api/api";
 
 //import {setImgDataCheckEditing} from "./check-editing-reducer";
 
@@ -20,6 +19,13 @@ const COEFFICIENT_CHANGE = 'COEFFICIENT_CHANGE';
 /**********/
 const GET_COEFFICIENT = 'GET_COEFFICIENT';
 
+
+
+const SEARCH_TEXT = 'SEARCH_TEXT';
+
+
+
+
 /*****TEXT_DATA******/
 const TEXT_DATA = 'TEXT_DATA';
 
@@ -31,6 +37,8 @@ const IMG_DATA = 'IMG_DATA';
 
 /*****-DELETE_PICTURE-******/
 const DELETE_PICTURE = 'DELETE_PICTURE';
+
+
 
 
 //const RESULTS_ADD_TEXT = 'RESULTS_ADD_TEXT';
@@ -45,6 +53,8 @@ let initialState = {
     tree: [],
     results: [],
     check: [],
+
+    searchText: "",
 
     result: [],
 
@@ -82,6 +92,84 @@ const createCheckReducer = (state = initialState, action) => {
         case GET_COEFFICIENT: {
             debugger;
             return { ...state, ...action}
+        }
+        case SEARCH_TEXT: {
+            debugger;
+            let Tree = state?.tree.children;
+            console.log(Tree + " Наш");
+
+            function filterArray(array, text) {
+                if(array){
+                    array.map((category) => {
+                        let items = category.children.filter((item) => {
+                            const itemTree =  item.name ?
+                                item.name.toUpperCase()
+                            : ''.toUpperCase();
+                            return itemTree.indexOf(text.toUpperCase()) > -1;
+                        });
+                        category.children = items;
+                        //arr.filter((category) => { return category !== undefined });
+                        //console.log(category.children.length + "length");
+                        console.log(category.children.length);
+                        if(category.children.length === 0){
+                            console.log( category + 'noname');
+                            delete category.name;
+                            delete category.id;
+                        }
+                        return items ? category : null;
+                    });
+                }
+
+                debugger;
+                //arr = arr.filter((category) => { return category.children.length !== 0 });
+                //arr = arr.filter((category) => { return category !== undefined });
+
+
+
+                 /*const newArray = [];
+                 debugger;
+                 if(array){
+                     for (let i = 0; i < array.length; i++) {
+                        for (let j in array[i].children) {
+                             if(array[i].children[j].name.indexOf(text) > - 1 === true){
+                                 newArray.push({name: array[i].children[j].name, id: array[i].children[j].id});
+                                 debugger;
+                             }
+                        }
+                     }
+                     return newArray;
+                 }*/
+           }
+
+            /*const newFilterArray = filterArray(Tree, action.searchText);
+            const children = newFilterArray;
+            const  tree = {
+                children: {
+                    name: "Результат поиска",
+                    ...children
+                }
+            }*/
+
+            //debugger;
+            //const j="";
+            const newFilterArray = filterArray(Tree, action.searchText);
+            console.log(newFilterArray);
+
+            //let arr = [];
+            // if(action.searchText=== ""){}
+
+            return {...state, a: action.searchText};
+
+            /*let newTree = Tree.filter((item) => {
+                console.log(item);
+                const itemTree = item.tree.children ?
+                    item.tree.children.toUpperCase()
+                    : ''.toUpperCase();
+                const textTree = action.searchText.toUpperCase();
+                return itemTree.indexOf(textTree) > - 1;
+            });*/
+
+             //return { ...state, ...action.searchText}
         }
         /***********/
         case COEFFICIENT_CHANGE: {
@@ -193,6 +281,13 @@ export const setCheckIdCheck = (id, parent_id) => ({type: VIEW_CHECK_ID, id, par
 export const setCreateDataCheck = (check, tree) => ({type: CREATE_DATA_CHECK, check, tree})
 export const setAddTextValue = (model, results) => ({type: ADD_TEXT_VALUE, model})
 
+
+
+
+export const setSearchDescription = (searchText) => ({type: SEARCH_TEXT, searchText})
+
+
+
 export const setShowResults = (/*model ,*/results) => ({type: SHOW_RESULTS, /*model,*/ results})
 
 export const setEndCheckResults = (/*model ,*/alertendresult) => ({type: END_CHECK, /*model,*/ alertendresult})
@@ -220,8 +315,11 @@ export const getCreateCheckThunkCreator = (setParentId) => {
     return (dispatch) => {
         CreateCheckAPI.CreateCheck(setParentId).then(response => {
             dispatch(toggleIsFetching(true));
+            debugger;
             if(response.status == 200) {
+                debugger;
                 CreateCheckAPI.ViewCheck(response.data.check.company_id, response.data.check.id).then(response => {
+                    debugger;
                     dispatch(setCreateDataCheck(response.data));
                     dispatch(toggleIsFetching(false));
                 });
@@ -230,8 +328,18 @@ export const getCreateCheckThunkCreator = (setParentId) => {
     }
 }
 
+export const getSearchTextThunkCreator = (searchText) => {
+
+    return (dispatch) => {
+
+            dispatch(setSearchDescription(searchText));
+
+    }
+}
+
 export const getViewCreateCheckThunkCreatorText  = (value, itemId, checkId) => {
     return (dispatch) => {
+        debugger;
         if(value && itemId && checkId){
             CreateCheckAPI.AddText(value, itemId, checkId).then(response => {
                 dispatch(setAddTextValue(response.data.model));
@@ -242,6 +350,7 @@ export const getViewCreateCheckThunkCreatorText  = (value, itemId, checkId) => {
 
 export const getViewCreateCheckThunkHistoryText = (value, itemId, checkId, parentId) => {
     return (dispatch) => {
+        debugger;
         if(value && itemId && checkId){
             CreateCheckAPI.AddText(value, itemId, checkId).then(response => {
                 dispatch(setAddTextValue(response.data.model));
@@ -257,6 +366,7 @@ export const getViewCreateCheckThunkHistoryText = (value, itemId, checkId, paren
 
 export const getViewHistoryCheckThunkShow = (parentId, checkId) => {
     return (dispatch) => {
+        debugger;
         if(parentId && checkId){
             CreateCheckAPI.ShowResults(parentId, checkId).then(response => {
                 dispatch(setShowResults(response.data));
@@ -269,6 +379,7 @@ export const getViewHistoryCheckThunkShow = (parentId, checkId) => {
 /******=-getEndCheckThunk-=******/
 export const getEndCheckThunk = (EndCheckTrue, EndParentId, EndCheckId) => {
     return (dispatch) => {
+        debugger;
         if(EndCheckTrue === true){
             EndCheckAPI.EndCheckAPI(EndParentId, EndCheckId).then(response => {
                 dispatch(setEndCheckResults(response.data));
@@ -285,8 +396,10 @@ export const getEndCheckThunk = (EndCheckTrue, EndParentId, EndCheckId) => {
 /*****--CREATE_DATA_CHECK--******/
 export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
     return (dispatch) => {
+        debugger;
         dispatch(toggleIsFetching(true));
         CreateCheckAPI.ViewCheck(parentId, checkId).then(response => {
+            debugger;
             dispatch(setCreateDataCheckEditing(response.data));
             dispatch(toggleIsFetching(false));
         });
@@ -296,6 +409,7 @@ export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
 /*****TEXT_DATA******/
 export const getTextThunkEditingAPI = (valueText, itemId, checkId) => {
     return (dispatch) => {
+        debugger;
         DataEditingAPI.AddText(valueText, itemId, checkId).then(response => {
             dispatch(setTextDataCheckEditing(response));
         });
@@ -335,6 +449,7 @@ export const getDelPictureThunkAPI = (itemId, checkId, resultId) => {
 
 const FunctionGetCoefficientsPerSection = (checkId, dispatch) => {
     DataEditingAPI.GetCoefficients(checkId).then(response => {
+        debugger;
         dispatch(setGetCoefficient(response));
     });
 }
@@ -352,6 +467,7 @@ export const getCoefficientThunkEditingAPI = (selectedValue, itemId, checkId) =>
 
 export const GetCoefficients = (checkId) => {
     return (dispatch) => {
+        debugger;
         FunctionGetCoefficientsPerSection(checkId, dispatch);
     }
 }
