@@ -5,7 +5,7 @@ import {
     GetCoefficients,
     getCreateCheckThunkCreator, getEndCheckThunk,
     getViewCreateCheckThunkCreatorText, getViewCreateCheckThunkHistoryText,
-    getViewHistoryCheckThunkShow, getSearchTextThunkCreator
+    getViewHistoryCheckThunkShow, getSearchTextThunkCreator, getResetStateCheckThunkCreator, getInputTextThunkCreator
 } from "../../../redux/create-check-reducer";
 
 {/*Убираеm WAR Recycle cykle*/}
@@ -28,10 +28,21 @@ const CreateCheckContainer = (props) => {
 
     useEffect(() => {
         debugger;
-        if(props.route.params?.searchText){
-            props.getSearchTextThunkCreator(props.route.params?.searchText);
+        if(props.route.params?.parentIdSearch && props.route.params?.checkIdSearch /*&& props.route.params?.searchText*/){
+            debugger;
+            props.getSearchTextThunkCreator(props.route.params?.parentIdSearch, props.route.params?.checkIdSearch /*&& props.route.params?.searchText*/);
         }
-    }, [props.route.params?.searchText]);
+    }, [props.route.params?.parentIdSearch, props.route.params?.checkIdSearch/*, props.route.params?.searchText*/]);
+
+
+    useEffect(() => {
+        debugger;
+        if(props.route.params?.TextInputSearch){
+            debugger;
+            props.getInputTextThunkCreator(props.route.params?.TextInputSearch);
+        }
+    }, [props.route.params?.TextInputSearch]);
+
 
     useEffect(() => {
         debugger
@@ -89,6 +100,7 @@ let mapStateToProps = (state) => {
         model: state.createCheckReducer.model,
         text: state.createCheckReducer.text,
         searchText: state.createCheckReducer.searchText,
+        textInput: state.createCheckReducer.textInput,
 
         parent_id: state.createCheckReducer.parent_id,
         check_id: state.createCheckReducer.check_id,
@@ -99,5 +111,5 @@ let mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-    getCreateCheckThunkCreator, getViewCreateCheckThunkCreatorText, getViewHistoryCheckThunkShow, getViewCreateCheckThunkHistoryText, getEndCheckThunk, getCoefficientThunkEditingAPI, GetCoefficients, getSearchTextThunkCreator
+    getCreateCheckThunkCreator, getViewCreateCheckThunkCreatorText, getViewHistoryCheckThunkShow, getViewCreateCheckThunkHistoryText, getEndCheckThunk, getCoefficientThunkEditingAPI, GetCoefficients, getSearchTextThunkCreator, getResetStateCheckThunkCreator, getInputTextThunkCreator
 })(CreateCheckContainer);

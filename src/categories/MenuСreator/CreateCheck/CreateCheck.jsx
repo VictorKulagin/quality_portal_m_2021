@@ -1,33 +1,43 @@
-import React, {useState, useMemo} from 'react'
+import React, {useState} from 'react'
 
-
-import {FlatGrid, SectionGrid} from 'react-native-super-grid';
-
-import {
-    ScrollView,
-    View,
-    Text,
-    TextInput,
-    StyleSheet,
-    SafeAreaView,
-    Dimensions,
-    TouchableOpacity,
-} from "react-native";
+import {Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,} from "react-native";
 
 import {DataTable} from 'react-native-paper';
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/TouchableRipple";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 import EndCheckTrue from "./CreateCheckEditing/Common/EndCheckTrue/EndCheckTrue";
 
 const CreateCheck = (props) => {
 
     debugger;
+    const padding = 10;
+    const deviceWidth = Dimensions.get('window').width;
+    const OptionCellDescription = (deviceWidth / 2) - (padding * 4);
+    const OptionCellComment = (deviceWidth / 2.2) - (padding * 4);
+    const CameraCellDescription = (deviceWidth / 13.1) - (padding * 4);
+    const CoefficientCellDescription = (deviceWidth / 5) - (padding * 4);
 
-    const [search, setsearch] = useState('');
+    console.log(deviceWidth);
+
+
+    const [search, setSearch] = useState(/*props.textInput*/'');
+
+    const imputRef = React.useRef();
+
+    debugger;
+    console.log(imputRef + "ref");
+
+    console.log(search);
 
     const isFocused = useIsFocused();
+
+
+    let onPostChange = () => {
+        let text = props.textInput;
+        return text;
+    }
 
     function GetTreeText({id}) {
 
@@ -54,63 +64,146 @@ const CreateCheck = (props) => {
 
 
     const searchFilter = (searchText) => {
-            debugger;
-        if(searchText /*&& searchText.length >= 3*/) {
 
+        console.log(searchText);
+        if(searchText) {
             setTimeout(() => props.navigation.navigate('Создать проверку', {
-                //itemId: value2.id,
-                /*checkId: props.check.id,
-                parentId: props.route.params.parentId,*/
-                searchText: searchText
+                TextInputSearch: searchText,
             }), 0)
-            debugger;
-            /*const newData = props.tree.children.filter((value) => {
-                const itemData = value.name ?
-                    value.title.toUpperCase()
-                    : ''.toUpperCase();
-                const textData = text.toUpperCase();
-                return itemData.indexOf(textData) > - 1;
-            });*/
-            /*setfilterdData(newData);
-            setsearch(text);*/
-            /*console.log(1);
-           return 1*/
-        //} else {
-            /*setfilterdData(masterData);
-            setsearch(text);*/
-            /*console.log(0);
-            return 0*/
-        //}
-        }
 
-        /*if(text) {
-            const newData = masterData.filter((item) => {
-                const itemData = item.title ?
-                    item.title.toUpperCase()
-                    : ''.toUpperCase();
-                const textData = text.toUpperCase();
-                return itemData.indexOf(textData) > - 1;
+                setTimeout(() => props.navigation.navigate('Создать проверку', {
+                    parentIdSearch: props.route.params.parentId,
+                    checkIdSearch: props.check.id,
+                }), 0)
+
+            console.log('SEARCH');
+            let Tree = props.tree?.children;
+
+            const text = searchText;
+
+            let count = 0;
+            Tree.map((category) => {
+                category.children = category.children.map((item) => {
+                    const itemTree = item.name ?
+                        item.name.toUpperCase()
+                        : ''.toUpperCase();
+
+                    //return itemTree.indexOf(text.toUpperCase()) > -1;
+
+                    if (itemTree.indexOf(text.toUpperCase()) > -1 !== true) {
+                        item.hide = true;
+                        // Object.defineProperty(item, 'hide', {
+                        //     value: false,
+                        //     enumerable: true,
+                        //     ///configurable: true
+                        // })
+                        // console.log(item);
+                    } else {
+                        item.hide = false;
+                        category.count = count++;
+                        //count++;
+                        // Object.defineProperty(item, 'hide', {
+                        //     value: true,
+                        //     enumerable: true,
+                        //     ///configurable: true
+                        // })
+                        // console.log(item);
+                    }
+                    return item;
+                });
+                 console.log(category + "category" + count) ;
+                 if(category.count) {
+                     category.hide = false;
+                 } else {
+                     category.hide = true;
+                 }
+
+                // console.log(items ? category : []);
+                return category;
             });
-            setfilterdData(newData);
-            setsearch(text);
-        } else {
-            setfilterdData(masterData);
-            setsearch(text);
-        }*/
+        }
     }
 
+    const resetFilter = () => {
+        setTimeout(() => props.navigation.navigate('Создать проверку', {
+            parentIdSearch: props.route.params.parentId,
+            checkIdSearch: props.check.id,
+        }), 0)
+        let Tree = props.tree?.children;
+        Tree.map((category) => {
+            category.children = category.children.map((item) => {
+debugger;
+                if (item.hide && item.hide === true) {
+                    debugger;
+                    item.hide = false;
+                }
+                return item;
+            });
+            console.log(category + "category") ;
+            if(category.hide && category.hide === true) {
+                category.hide = false;
+            }
+            debugger;
+            return category;
+        });
+    }
+
+
+ /**Функция скрыть кнопку Завершить Проверку**/
+    /*function countCategoryHide (){
+        let Tree = props.tree?.children;
+        debugger;
+        let count = 0;
+        if(Tree !== undefined){
+            Tree.map((category) => {
+                console.log(category.hide);
+                if(category.hide === true){
+                    count++;
+                } else {
+                    return 0;
+                }
+            });
+            return count;
+        }
+    }*/
+
+    //debugger;
+    //const constCountCategoryHide = countCategoryHide()
+    //console.log( constCountCategoryHide + " countCategory");
+
+    debugger;
+    /*console.log(searchFilter() + " searchFilter");*/
+
+    debugger;
+    //console.log(props.tree + " props.Tree");
 
     function Seach() {
         return (<View>
                         <View>
                             <TextInput
-                                style={styles.textInputStyle}
-                                //value={search}
+                                //ref={imputRef}
+                                style={[styles.textInputStyle, {position: 'relative'}]}
+                                //value={props.textInput}
                                 placeholder="Введите текст"
                                 //underlineColorAndroid="transparent"
-                                //onChangeText={(text) => searchFilter(text)}
+                                /*onChangeText={props.textInput}
+                                defaultValue={'text'}*/
                                 onSubmitEditing={(searchText) => {searchFilter(searchText.nativeEvent.text)}}
+                                //onSubmitEditing={searchFilter(props.textInput)}
+                                /*onChangeText={props.textInput}
+                                defaultValue={props.textInput}*/
                             />
+                            <View style={{ position: 'absolute', left: deviceWidth-40, paddingTop: 10 }}>
+                                <Icon name="close" size={35} color="#000"
+                                      style={{
+                                          opacity: 0.7,
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          position: 'relative'
+                                      }}
+                                      onPress={() => resetFilter()}
+                                />
+                            </View>
                         </View>
             </View>)
         return null
@@ -135,63 +228,64 @@ const CreateCheck = (props) => {
     function GetTreeItems () {
         if (props.tree?.children !== undefined) {
             return props.tree?.children.map((value, index) => {
-                //debugger;
+
                 return (
                     <View key={Math.random().toString(36).substr(2, 9)}>
 
-                        <NameTitle name={value.name} index={index}/>
+                        <NameTitle name={value.name} hide={value.hide} index={index}/>
 
-                        {(value.name !== undefined) ? value.children.map((value2, index2) => {
-                            return (
-                                <DataTable.Row key={Math.random().toString(36).substr(2, 10)} style={styles.dataTableRow}>
-                                    <TouchableRipple style={{width: OptionCellDescription}}>
-                                        <Text style={{ /*flexGrow: 1*/ marginBottom: 5, marginTop: 5}}>
-                                            {value2.name}
-                                        </Text>
-                                    </TouchableRipple>
+
+                        {(value.name !== undefined /*&& !value.hide*/) ? value.children.map((value2, index2) => {
+                            if (!value2.hide) {
+                                return (
+                                    <DataTable.Row key={Math.random().toString(36).substr(2, 10)} style={styles.dataTableRow}>
+                                        <TouchableRipple style={{width: OptionCellDescription}}>
+                                            <Text style={{ /*flexGrow: 1*/ marginBottom: 5, marginTop: 5}}>
+                                                {value2.name}
+                                            </Text>
+                                        </TouchableRipple>
 
                                         <View>
                                             <GetTreeText id={value2.id}/>
                                         </View>
 
-                                    <TouchableRipple style={{width: CameraCellDescription, justifyContent: 'center'}}>
-                                        <View>
-                                            <View style={{position: 'absolute', top: -10, right: 25}}>
-                                                <Text style={{fontWeight: 'bold'}}>{props.results[value2.id].files ? props.results[value2.id].files.length : []}</Text>
+                                        <TouchableRipple style={{width: CameraCellDescription, justifyContent: 'center'}}>
+                                            <View>
+                                                <View style={{position: 'absolute', top: -10, right: 25}}>
+                                                    <Text style={{fontWeight: 'bold'}}>{props.results[value2.id]?.files ? props.results[value2.id]?.files.length : []}</Text>
+                                                </View>
+                                                <Icon name="camera" size={35} color="#000"
+                                                      style={{
+                                                          opacity: 0.7,
+                                                          alignItems: 'center',
+                                                          justifyContent: 'center',
+                                                          position: 'relative'
+                                                      }}
+                                                      onPress={() => props.navigation.navigate('Редактировать проверку', {
+                                                          itemId: value2.id,
+                                                          checkId: props.check.id,
+                                                          parentId: props.route.params.parentId
+                                                      })}/>
                                             </View>
-                                            <Icon name="camera" size={35} color="#000"
-                                                  style={{
-                                                      opacity: 0.7,
-                                                      alignItems: 'center',
-                                                      justifyContent: 'center',
-                                                      position: 'relative'
-                                                  }}
+
+                                        </TouchableRipple>
+                                        <TouchableRipple
+                                            style={{width: CoefficientCellDescription, justifyContent: 'center'}}>
+                                            <Text style={{textAlign: 'center'}}
                                                   onPress={() => props.navigation.navigate('Редактировать проверку', {
                                                       itemId: value2.id,
                                                       checkId: props.check.id,
                                                       parentId: props.route.params.parentId
-                                                  })}/>
-                                        </View>
+                                                  })}
+                                            >{ EnterCoefficientResult(value2.id) }</Text>
+                                        </TouchableRipple>
 
-                                    </TouchableRipple>
-                                    <TouchableRipple
-                                        style={{width: CoefficientCellDescription, justifyContent: 'center'}}>
-                                        <Text style={{textAlign: 'center'}}
-                                              onPress={() => props.navigation.navigate('Редактировать проверку', {
-                                                  itemId: value2.id,
-                                                  checkId: props.check.id,
-                                                  parentId: props.route.params.parentId
-                                              })}
-                                        >{ EnterCoefficientResult(value2.id) }</Text>
-                                    </TouchableRipple>
-
-                                </DataTable.Row>
-                            )
+                                    </DataTable.Row>
+                                )
+                            }
                         }) : []}
 
-
-                        <AllCoeffForPats getResult={props.getResult} valueId={props?.getResult.data.categories[value.id]}/>
-
+                        <AllCoeffForPats getResult={props.getResult} hide={value.hide} valueId={props?.getResult?.data.categories[value.id]}/>
 
                     </View>
                 )
@@ -201,12 +295,12 @@ const CreateCheck = (props) => {
     }
 
 
-    const NameTitle = ({name, index}) => {
-        if(name !== undefined) {
+    const NameTitle = ({name, hide, index}) => {
+        if(name !== undefined && hide === false) {
             return (
                 <DataTable.Header key={index} style={styles.bgColor}>
                     <DataTable.Title numberOfLines={8}>
-                        <Text style={[styles.bgColor, {fontSize: 16}]}>{name}</Text>
+                        <Text style={[styles.bgColor, {fontSize: 16}]}>{ name }</Text>
                     </DataTable.Title>
                 </DataTable.Header>
             )
@@ -216,12 +310,12 @@ const CreateCheck = (props) => {
     }
 
 
-    const AllCoeffForPats = ({getResult, valueId}) => {
-        if(valueId !== undefined) {
+    const AllCoeffForPats = ({getResult, hide, valueId}) => {
+        if(valueId !== undefined && hide === false) {
             return(
                 <DataTable.Header>
                     <DataTable.Title numberOfLines={8}>
-                        <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{getResult !== undefined && valueId ? `Коэффициент за раздел: ${valueId.toFixed(2)}` : '0'}</Text>
+                        <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{ getResult !== undefined && valueId ? `Коэффициент за раздел: ${valueId.toFixed(2)}` : '0' }</Text>
                     </DataTable.Title>
                 </DataTable.Header>
             )
@@ -231,9 +325,8 @@ const CreateCheck = (props) => {
     }
 
     const EnterCoefficientResult = (id) => {
-        //debugger;
         if (props.results.length !== 0) {
-            if (props.results[id].coefficient !== undefined) {
+            if (props.results[id]?.coefficient !== undefined) {
                 if(props.check.id === props.results[id].coefficient.check_id){
                     return props.results[id].coefficient.value;
                 }
@@ -242,47 +335,46 @@ const CreateCheck = (props) => {
         return null
     }
 
-    function EndCheck() {
+    function EndCheck(search) {
         debugger;
-        return (
-            <View>
+        console.log(search);
+         //if(constCountCategoryHide === 0) {
+            return (
                 <View>
-                    <DataTable.Header style={styles.touchableOpacitySection}>
-                        <DataTable.Title numberOfLines={8}>
-                            <Text style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за проверку: ${props.getResult.data.common?.toFixed(2)}` : '0'}</Text>
-                        </DataTable.Title>
-                    </DataTable.Header>
+                    <View>
+                        <DataTable.Header style={styles.touchableOpacitySection}>
+                            <DataTable.Title numberOfLines={8}>
+                                <Text
+                                    style={[styles.bgColorCoefficient, {fontSize: 16}]}>{props.getResult !== undefined ? `Коэффициент за проверку: ${props.getResult.data.common?.toFixed(2)}` : '0'}</Text>
+                            </DataTable.Title>
+                        </DataTable.Header>
 
-                    <TouchableOpacity onPress={() => props.navigation.navigate('Создать проверку', {
-                        EndCheckTrue: EndCheckTrue(props),
-                        EndCheckId: props.check.id,
-                        EndParentId: (props.route.params.parentId !== undefined) ? props.route.params.parentId : props.route.params.parent_id_
-                    })}
-                                      style={styles.touchableOpacity}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('Создать проверку', {
+                            EndCheckTrue: EndCheckTrue(props),
+                            EndCheckId: props.check.id,
+                            EndParentId: (props.route.params.parentId !== undefined) ? props.route.params.parentId : props.route.params.parent_id_
+                        })}
+                                          style={styles.touchableOpacity}>
 
-                        <Text style={styles.touchableOpacityText}>Завершить проверку</Text>
-                        {/*{props.alertendresult !== undefined && props.alertendresult.result === 'success' ? props.navigation.navigate('Предприятия'
+                            <Text style={styles.touchableOpacityText}>Завершить проверку</Text>
+                            {/*{props.alertendresult !== undefined && props.alertendresult.result === 'success' ? props.navigation.navigate('Предприятия'
                          ) : []}*/}
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <Text style={styles.touchableOpacityNotes}>
+                            При нажатии завершить проверку: автоотчет на почту: Техническому директору, Заместителю
+                            директора, Административному директору,
+                        </Text>
+                    </View>
                 </View>
-                <View>
-                    <Text style={styles.touchableOpacityNotes}>
-                        При нажатии завершить проверку: автоотчет на почту: Техническому директору, Заместителю
-                        директора, Административному директору,
-                    </Text>
-                </View>
-            </View>
-        )
+            )
+       //}
         return null
     }
 
 
-    const padding = 10;
-    const deviceWidth = Dimensions.get('window').width;
-    const OptionCellDescription = (deviceWidth / 2) - (padding * 4);
-    const OptionCellComment = (deviceWidth / 2.2) - (padding * 4);
-    const CameraCellDescription = (deviceWidth / 13.1) - (padding * 4);
-    const CoefficientCellDescription = (deviceWidth / 5) - (padding * 4);
+
 
 
     //debugger;

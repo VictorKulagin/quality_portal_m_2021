@@ -18,10 +18,11 @@ const  ALERT_END_CHECK = 'ALERT_END_CHECK';
 const COEFFICIENT_CHANGE = 'COEFFICIENT_CHANGE';
 /**********/
 const GET_COEFFICIENT = 'GET_COEFFICIENT';
+/**********/
+const TEXT_INPUT_SEARCH = 'TEXT_INPUT_SEARCH';
 
 
-
-const SEARCH_TEXT = 'SEARCH_TEXT';
+//const SEARCH_TEXT = 'SEARCH_TEXT';
 
 
 
@@ -54,7 +55,7 @@ let initialState = {
     results: [],
     check: [],
 
-    searchText: "",
+    textInput: '',
 
     result: [],
 
@@ -81,6 +82,8 @@ const createCheckReducer = (state = initialState, action) => {
             return { ...state,  ...action.id, ...action.parent_id }
         }
         case CREATE_DATA_CHECK: {
+            debugger;
+            console.log(action.check);
             return { ...state,  ...action.check }
         }
         case SHOW_RESULTS: {
@@ -93,84 +96,15 @@ const createCheckReducer = (state = initialState, action) => {
             debugger;
             return { ...state, ...action}
         }
-        case SEARCH_TEXT: {
+        case TEXT_INPUT_SEARCH: {
             debugger;
-            let Tree = state?.tree.children;
-            console.log(Tree + " Наш");
-
-            function filterArray(array, text) {
-                if(array){
-                    array.map((category) => {
-                        let items = category.children.filter((item) => {
-                            const itemTree =  item.name ?
-                                item.name.toUpperCase()
-                            : ''.toUpperCase();
-                            return itemTree.indexOf(text.toUpperCase()) > -1;
-                        });
-                        category.children = items;
-                        //arr.filter((category) => { return category !== undefined });
-                        //console.log(category.children.length + "length");
-                        console.log(category.children.length);
-                        if(category.children.length === 0){
-                            console.log( category + 'noname');
-                            delete category.name;
-                            delete category.id;
-                        }
-                        return items ? category : null;
-                    });
-                }
-
-                debugger;
-                //arr = arr.filter((category) => { return category.children.length !== 0 });
-                //arr = arr.filter((category) => { return category !== undefined });
-
-
-
-                 /*const newArray = [];
-                 debugger;
-                 if(array){
-                     for (let i = 0; i < array.length; i++) {
-                        for (let j in array[i].children) {
-                             if(array[i].children[j].name.indexOf(text) > - 1 === true){
-                                 newArray.push({name: array[i].children[j].name, id: array[i].children[j].id});
-                                 debugger;
-                             }
-                        }
-                     }
-                     return newArray;
-                 }*/
-           }
-
-            /*const newFilterArray = filterArray(Tree, action.searchText);
-            const children = newFilterArray;
-            const  tree = {
-                children: {
-                    name: "Результат поиска",
-                    ...children
-                }
-            }*/
-
-            //debugger;
-            //const j="";
-            const newFilterArray = filterArray(Tree, action.searchText);
-            console.log(newFilterArray);
-
-            //let arr = [];
-            // if(action.searchText=== ""){}
-
-            return {...state, a: action.searchText};
-
-            /*let newTree = Tree.filter((item) => {
-                console.log(item);
-                const itemTree = item.tree.children ?
-                    item.tree.children.toUpperCase()
-                    : ''.toUpperCase();
-                const textTree = action.searchText.toUpperCase();
-                return itemTree.indexOf(textTree) > - 1;
-            });*/
-
-             //return { ...state, ...action.searchText}
+            return { ...state, textInput: action.textInput}
         }
+        /*case SEARCH_TEXT: {
+            debugger;
+            return 0;
+        }*/
+
         /***********/
         case COEFFICIENT_CHANGE: {
             debugger;
@@ -282,9 +216,9 @@ export const setCreateDataCheck = (check, tree) => ({type: CREATE_DATA_CHECK, ch
 export const setAddTextValue = (model, results) => ({type: ADD_TEXT_VALUE, model})
 
 
+export const TextInputSearch_ = (textInput) => ({type: TEXT_INPUT_SEARCH, textInput})
 
-
-export const setSearchDescription = (searchText) => ({type: SEARCH_TEXT, searchText})
+//export const setSearchDescription = (searchText) => ({type: SEARCH_TEXT, searchText})
 
 
 
@@ -328,12 +262,25 @@ export const getCreateCheckThunkCreator = (setParentId) => {
     }
 }
 
-export const getSearchTextThunkCreator = (searchText) => {
+export const getSearchTextThunkCreator = (parentIdSearch, checkIdSearch/*, searchText*/ ) => {
 
     return (dispatch) => {
+        debugger;
+        CreateCheckAPI.ViewCheck(parentIdSearch, checkIdSearch).then(response => {
+            debugger;
+            //dispatch(setCreateDataCheckEditing(response.data));
+            //dispatch(setCreateDataCheck(response.data));
+            dispatch(toggleIsFetching(false));
+            //dispatch(setSearchDescription(searchText));
+        });
+    }
+}
 
-            dispatch(setSearchDescription(searchText));
 
+export const getInputTextThunkCreator = (TextInputSearch) => {
+    return (dispatch) => {
+        debugger;
+        dispatch(TextInputSearch_(TextInputSearch));
     }
 }
 
@@ -347,6 +294,9 @@ export const getViewCreateCheckThunkCreatorText  = (value, itemId, checkId) => {
         }
     }
 }
+
+
+
 
 export const getViewCreateCheckThunkHistoryText = (value, itemId, checkId, parentId) => {
     return (dispatch) => {
@@ -369,6 +319,7 @@ export const getViewHistoryCheckThunkShow = (parentId, checkId) => {
         debugger;
         if(parentId && checkId){
             CreateCheckAPI.ShowResults(parentId, checkId).then(response => {
+                debugger;
                 dispatch(setShowResults(response.data));
             })
         }
