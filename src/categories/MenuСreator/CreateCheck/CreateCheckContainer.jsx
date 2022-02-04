@@ -35,13 +35,13 @@ const CreateCheckContainer = (props) => {
     }, [props.route.params?.parentIdSearch, props.route.params?.checkIdSearch/*, props.route.params?.searchText*/]);
 
 
-    useEffect(() => {
+    /*useEffect(() => {
         debugger;
         if(props.route.params?.TextInputSearch){
             debugger;
             props.getInputTextThunkCreator(props.route.params?.TextInputSearch);
         }
-    }, [props.route.params?.TextInputSearch]);
+    }, [props.route.params?.TextInputSearch]);*/
 
 
     useEffect(() => {

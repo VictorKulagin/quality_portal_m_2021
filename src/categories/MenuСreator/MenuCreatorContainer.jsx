@@ -14,7 +14,7 @@ import mapDispatchToProps from "react-redux/lib/connect/mapDispatchToProps";*/
 const MenuCreatorContainer = (props) =>  {
     //debugger;
     useEffect((parent_id) => {
-        //debugger;
+        debugger;
         props.getCheckThunkCreator(/*19*//*props.parent_id*/props.route.params.name.id);
     }, [] );
 

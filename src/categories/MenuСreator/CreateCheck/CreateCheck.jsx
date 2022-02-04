@@ -66,10 +66,10 @@ const CreateCheck = (props) => {
     const searchFilter = (searchText) => {
 
         console.log(searchText);
-        if(searchText) {
-            setTimeout(() => props.navigation.navigate('Создать проверку', {
+        if(searchText.length > 2) {
+            /*setTimeout(() => props.navigation.navigate('Создать проверку', {
                 TextInputSearch: searchText,
-            }), 0)
+            }), 0)*/
 
                 setTimeout(() => props.navigation.navigate('Создать проверку', {
                     parentIdSearch: props.route.params.parentId,
@@ -80,7 +80,7 @@ const CreateCheck = (props) => {
             let Tree = props.tree?.children;
 
             const text = searchText;
-
+            debugger;
             let count = 0;
             Tree.map((category) => {
                 category.children = category.children.map((item) => {
@@ -92,6 +92,8 @@ const CreateCheck = (props) => {
 
                     if (itemTree.indexOf(text.toUpperCase()) > -1 !== true) {
                         item.hide = true;
+                        //category.count = count--;
+                        debugger
                         // Object.defineProperty(item, 'hide', {
                         //     value: false,
                         //     enumerable: true,
@@ -101,6 +103,7 @@ const CreateCheck = (props) => {
                     } else {
                         item.hide = false;
                         category.count = count++;
+                        debugger;
                         //count++;
                         // Object.defineProperty(item, 'hide', {
                         //     value: true,
@@ -109,14 +112,23 @@ const CreateCheck = (props) => {
                         // })
                         // console.log(item);
                     }
+
+                    if(category.count && category.count > 0) {
+                        debugger;
+                        category.hide = false;
+                    } else {
+                        category.hide = true;
+                    }
+
                     return item;
                 });
-                 console.log(category + "category" + count) ;
+                 /*console.log(category + "category" + count) ;
                  if(category.count) {
-                     category.hide = false;
-                 } else {
+                     debugger;
                      category.hide = true;
-                 }
+                 } else {
+                     category.hide = false;
+                 }*/
 
                 // console.log(items ? category : []);
                 return category;
@@ -125,6 +137,10 @@ const CreateCheck = (props) => {
     }
 
     const resetFilter = () => {
+        /*setTimeout(() => props.navigation.navigate('Создать проверку', {
+            TextInputSearch: "",
+        }), 0)*/
+
         setTimeout(() => props.navigation.navigate('Создать проверку', {
             parentIdSearch: props.route.params.parentId,
             checkIdSearch: props.check.id,
@@ -185,13 +201,10 @@ debugger;
                                 style={[styles.textInputStyle, {position: 'relative'}]}
                                 //value={props.textInput}
                                 placeholder="Введите текст"
-                                //underlineColorAndroid="transparent"
-                                /*onChangeText={props.textInput}
-                                defaultValue={'text'}*/
                                 onSubmitEditing={(searchText) => {searchFilter(searchText.nativeEvent.text)}}
                                 //onSubmitEditing={searchFilter(props.textInput)}
-                                /*onChangeText={props.textInput}
-                                defaultValue={props.textInput}*/
+                                //onChangeText={(searchText) => {searchFilter(searchText)}}
+                                defaultValue={props.textInput}
                             />
                             <View style={{ position: 'absolute', left: deviceWidth-40, paddingTop: 10 }}>
                                 <Icon name="close" size={35} color="#000"

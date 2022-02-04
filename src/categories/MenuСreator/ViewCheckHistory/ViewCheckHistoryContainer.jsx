@@ -23,16 +23,16 @@ YellowBox.ignoreWarnings([
 //debugger;
 
 const ViewCheckHistoryContainer = (props) => {
-    //debugger;
+    debugger;
     const parent_id_ = props.route.params.parent_id_;
-    console.log(parent_id_);
+    //console.log(parent_id_);
 
     useEffect(() => {
-        props.getViewCheckThunkHistory(parent_id_, props.route.params.IdView);
-    }, [props.route.params.IdView] );
+        debugger;
+        props.getViewCheckThunkHistory(parent_id_, props.route.params?.Page, props.route.params?.pageSize, props.route.params?.IdView);
+    }, [parent_id_, props.route.params?.Page, props.route.params?.pageSize, props.route.params?.IdView] );
 
     useEffect(() =>{
-        debugger;
         setTimeout(() => props.navigation.setOptions({ title: `Просмотреть историю проверок ${props.categoryName}` }), 0);
     });
 

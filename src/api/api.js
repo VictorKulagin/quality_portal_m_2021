@@ -87,64 +87,130 @@ export const logoutScreenAuthAPI = {
 
 debugger;
 export const CreateCheckAPI = {
-    CreateCheck(parentIdCheck) {
+    async CreateCheck(parentIdCheck) {
         debugger;
-         return instance.get(`api/check/create?parent_id=${parentIdCheck}`);
+        try {
+            return await instance.get(`api/check/create?parent_id=${parentIdCheck}`);
+        } catch (error) {
+            throw new Error('Can\'t create check');
+        }
+
     },
-    ViewCheck(parentIdCheck, checkIdCheck) {
+    async ViewCheck(parentIdCheck, checkIdCheck) {
         debugger;
-        return instance.get(`api/check/view?parent_id=${parentIdCheck}&check_id=${checkIdCheck}`);
+        try {
+            return instance.get(`api/check/view?parent_id=${parentIdCheck}&check_id=${checkIdCheck}`);
+        } catch (error) {
+            throw new Error('Can\'t view check');
+        }
+
     },
-    AddText (value, itemId, checkId){
-        return instance.post("api/results/add-text?access-token="+ config.accessTocken, { value: value, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
+    async AddText(value, itemId, checkId) {
+        try {
+            return instance.post("api/results/add-text?access-token=" + config.accessTocken, {
+                value: value,
+                itemId: itemId,
+                checkId: checkId
+            }); /* checkId - номер проверки */
+        } catch (error) {
+            throw new Error('Can\'t add text');
+        }
+
     },
-    ShowResults (parentId, checkId){
-        return instance.get(`api/check/view?parent_id=${parentId}&check_id=${checkId}`);
+    async ShowResults(parentId, checkId) {
+        try {
+            return instance.get(`api/check/view?parent_id=${parentId}&check_id=${checkId}`);
+        } catch (error) {
+            throw new Error('Can\'t show results');
+        }
     }
 }
 
 export const EndCheckAPI = {
-    EndCheckAPI(EndParentId, EndCheckId) {
+
+    async EndCheckAPI(EndParentId, EndCheckId) {
         debugger;
-        return instance.get(`api/check/finish?parent_id=${EndParentId}&check_id=${EndCheckId}`);
+        try {
+            return await instance.get(`api2/check/finish?parent_id=${EndParentId}&check_id=${EndCheckId}`);
+        } catch (error) {
+            throw new Error('Can\'t loading check');
+        }
     }
 }
 
 export const DelPictureApi = {
     async DelPicture(itemId, checkId, resultId) {
-        console.log(`${itemId} ${checkId} ${resultId}`);
-        debugger;
-        return await instance.post(`api/results/delete-photo?access-token=`+ config.accessTocken, { itemId: itemId, checkId: checkId, resultId: resultId })
+        try {
+            return await instance.post(`api/results/delete-photo?access-token=` + config.accessTocken, {
+                itemId: itemId,
+                checkId: checkId,
+                resultId: resultId
+            })
+        } catch (error) {
+            throw new Error('Can\'t delete photo');
+        }
     }
 }
 
 debugger;
 export const ViewCheckHistoryAPI = {
-    ViewCheckHistory(parentIdView) {
+    async ViewCheckHistory(parentIdView, Page = 2, pageSize = 15) {
         debugger;
-        return instance.get(`api/check/index?parent_id=${parentIdView}`);
+        try {
+            //return instance.get(`api/check/index?parent_id=${parentIdView}`);
+            return await instance.get(`api/check/index?parent_id=${parentIdView}&page=${Page}&page-size=${pageSize}`);
+        } catch (error) {
+            throw new Error('Can\'t loading list check');
+        }
     },
-    DeleteViewCheckHistory(checkIdView) {
+    async DeleteViewCheckHistory(checkIdView) {
         debugger;
-        return instance.post(`api/check/delete?check_id=${checkIdView}`);
+        try {
+            return await instance.post(`api/check/delete?check_id=${checkIdView}`);
+        } catch (error) {
+            throw new Error('Can\'t delete check');
+        }
     },
 }
 
 export const DataEditingAPI = {
-    AddFile(formData, itemId, checkId){
+    async AddFile(formData, itemId, checkId) {
         debugger;
-        return instance.post(`api/results/add-file-new`, formData, {
-            'Content-Type': 'multipart/form-data'
+        try {
+            return await instance.post(`api/results/add-file-new`, formData, {
+                    'Content-Type': 'multipart/form-data'
+                }
+            )
+        } catch (error) {
+            throw new Error('Can\'t add file');
         }
-        )
     },
-    AddText (valueText, itemId, checkId){
-        return instance.post("api/results/add-text", { value: valueText, itemId: itemId, checkId: checkId }); /* checkId - номер проверки */
+    async AddText(valueText, itemId, checkId) {
+        try {
+            return instance.post("api/results/add-text", {value: valueText, itemId: itemId, checkId: checkId}); /* checkId - номер проверки */
+        } catch (error) {
+            throw new Error('Can\'t add text');
+        }
+
     },
-    async ChangeCoefficient (selectedValue, itemId, checkId) {
-        return await instance.post("api/results/add-coefficient", { value: selectedValue, itemId: itemId, checkId: checkId });
+    async ChangeCoefficient(selectedValue, itemId, checkId) {
+        try {
+            return await instance.post("api/results/add-coefficient", {
+                value: selectedValue,
+                itemId: itemId,
+                checkId: checkId
+            });
+        } catch (error) {
+            throw new Error('Can\'t add coefficient');
+        }
+
     },
-    GetCoefficients (checkId){
-        return instance.get(`api/check/get-coefficients?check_id=${checkId}`);
+    async GetCoefficients(checkId) {
+        try {
+            return instance.get(`api/check/get-coefficients?check_id=${checkId}`);
+        } catch (error) {
+            throw new Error('Can\'t add get coefficients');
+        }
+
     }
 }

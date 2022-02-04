@@ -19,7 +19,7 @@ const COEFFICIENT_CHANGE = 'COEFFICIENT_CHANGE';
 /**********/
 const GET_COEFFICIENT = 'GET_COEFFICIENT';
 /**********/
-const TEXT_INPUT_SEARCH = 'TEXT_INPUT_SEARCH';
+//const TEXT_INPUT_SEARCH = 'TEXT_INPUT_SEARCH';
 
 
 //const SEARCH_TEXT = 'SEARCH_TEXT';
@@ -48,7 +48,7 @@ const DELETE_PICTURE = 'DELETE_PICTURE';
 const  SHOW_RESULTS = 'SHOW_RESULTS';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 
-debugger;
+
 let initialState = {
 
     tree: [],
@@ -70,7 +70,7 @@ let initialState = {
 }
 
 const createCheckReducer = (state = initialState, action) => {
-    debugger;
+
     switch (action.type) {
         case ID_CHECK: {
             return { ...state, check: { ...action.check.check }, tree: { ...action.check.tree } }
@@ -82,8 +82,7 @@ const createCheckReducer = (state = initialState, action) => {
             return { ...state,  ...action.id, ...action.parent_id }
         }
         case CREATE_DATA_CHECK: {
-            debugger;
-            console.log(action.check);
+            //console.log(action.check);
             return { ...state,  ...action.check }
         }
         case SHOW_RESULTS: {
@@ -93,13 +92,12 @@ const createCheckReducer = (state = initialState, action) => {
             return { ...state, ...action.model}
         }
         case GET_COEFFICIENT: {
-            debugger;
             return { ...state, ...action}
         }
-        case TEXT_INPUT_SEARCH: {
+        /*case TEXT_INPUT_SEARCH: {
             debugger;
             return { ...state, textInput: action.textInput}
-        }
+        }*/
         /*case SEARCH_TEXT: {
             debugger;
             return 0;
@@ -121,7 +119,6 @@ const createCheckReducer = (state = initialState, action) => {
 
         /*****TEXT_DATA******/
         case TEXT_DATA: {
-            debugger;
             let newResults = state.results;
             let item_id = action.results.data.model.item_id;
             let item_results = {...newResults[item_id], text: action.results.data.model};
@@ -147,7 +144,6 @@ const createCheckReducer = (state = initialState, action) => {
         }
 
         case IMG_DATA: {
-            debugger;
             let newResults = state.results;
             if(action.results.files !== undefined) {
                 let item_id = action.results.files[0].item_id;
@@ -216,7 +212,7 @@ export const setCreateDataCheck = (check, tree) => ({type: CREATE_DATA_CHECK, ch
 export const setAddTextValue = (model, results) => ({type: ADD_TEXT_VALUE, model})
 
 
-export const TextInputSearch_ = (textInput) => ({type: TEXT_INPUT_SEARCH, textInput})
+//export const TextInputSearch_ = (textInput) => ({type: TEXT_INPUT_SEARCH, textInput})
 
 //export const setSearchDescription = (searchText) => ({type: SEARCH_TEXT, searchText})
 
@@ -249,11 +245,8 @@ export const getCreateCheckThunkCreator = (setParentId) => {
     return (dispatch) => {
         CreateCheckAPI.CreateCheck(setParentId).then(response => {
             dispatch(toggleIsFetching(true));
-            debugger;
             if(response.status == 200) {
-                debugger;
                 CreateCheckAPI.ViewCheck(response.data.check.company_id, response.data.check.id).then(response => {
-                    debugger;
                     dispatch(setCreateDataCheck(response.data));
                     dispatch(toggleIsFetching(false));
                 });
@@ -265,9 +258,7 @@ export const getCreateCheckThunkCreator = (setParentId) => {
 export const getSearchTextThunkCreator = (parentIdSearch, checkIdSearch/*, searchText*/ ) => {
 
     return (dispatch) => {
-        debugger;
         CreateCheckAPI.ViewCheck(parentIdSearch, checkIdSearch).then(response => {
-            debugger;
             //dispatch(setCreateDataCheckEditing(response.data));
             //dispatch(setCreateDataCheck(response.data));
             dispatch(toggleIsFetching(false));
@@ -277,16 +268,15 @@ export const getSearchTextThunkCreator = (parentIdSearch, checkIdSearch/*, searc
 }
 
 
-export const getInputTextThunkCreator = (TextInputSearch) => {
+/*export const getInputTextThunkCreator = (TextInputSearch) => {
     return (dispatch) => {
         debugger;
         dispatch(TextInputSearch_(TextInputSearch));
     }
-}
+}*/
 
 export const getViewCreateCheckThunkCreatorText  = (value, itemId, checkId) => {
     return (dispatch) => {
-        debugger;
         if(value && itemId && checkId){
             CreateCheckAPI.AddText(value, itemId, checkId).then(response => {
                 dispatch(setAddTextValue(response.data.model));
@@ -300,7 +290,6 @@ export const getViewCreateCheckThunkCreatorText  = (value, itemId, checkId) => {
 
 export const getViewCreateCheckThunkHistoryText = (value, itemId, checkId, parentId) => {
     return (dispatch) => {
-        debugger;
         if(value && itemId && checkId){
             CreateCheckAPI.AddText(value, itemId, checkId).then(response => {
                 dispatch(setAddTextValue(response.data.model));
@@ -316,10 +305,8 @@ export const getViewCreateCheckThunkHistoryText = (value, itemId, checkId, paren
 
 export const getViewHistoryCheckThunkShow = (parentId, checkId) => {
     return (dispatch) => {
-        debugger;
         if(parentId && checkId){
             CreateCheckAPI.ShowResults(parentId, checkId).then(response => {
-                debugger;
                 dispatch(setShowResults(response.data));
             })
         }
@@ -330,7 +317,6 @@ export const getViewHistoryCheckThunkShow = (parentId, checkId) => {
 /******=-getEndCheckThunk-=******/
 export const getEndCheckThunk = (EndCheckTrue, EndParentId, EndCheckId) => {
     return (dispatch) => {
-        debugger;
         if(EndCheckTrue === true){
             EndCheckAPI.EndCheckAPI(EndParentId, EndCheckId).then(response => {
                 dispatch(setEndCheckResults(response.data));
@@ -350,7 +336,6 @@ export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
         debugger;
         dispatch(toggleIsFetching(true));
         CreateCheckAPI.ViewCheck(parentId, checkId).then(response => {
-            debugger;
             dispatch(setCreateDataCheckEditing(response.data));
             dispatch(toggleIsFetching(false));
         });
@@ -360,7 +345,6 @@ export const getCheckThunkCreatorEdition = (parentId, itemId, checkId) => {
 /*****TEXT_DATA******/
 export const getTextThunkEditingAPI = (valueText, itemId, checkId) => {
     return (dispatch) => {
-        debugger;
         DataEditingAPI.AddText(valueText, itemId, checkId).then(response => {
             dispatch(setTextDataCheckEditing(response));
         });
@@ -370,7 +354,6 @@ export const getTextThunkEditingAPI = (valueText, itemId, checkId) => {
 /*****CLEAR_TEXT_DATA******/
 export const getClearTextThunkEditingAPI = (valueText, itemId, checkId) => {
     return (dispatch) => {
-        debugger;
         DataEditingAPI.AddText(valueText, itemId, checkId).then(response => {
             dispatch(setClearTextDataCheckEditing(response));
         });
@@ -379,19 +362,14 @@ export const getClearTextThunkEditingAPI = (valueText, itemId, checkId) => {
 
 export const getFilesThunkEditingAPI = (formData) => {
     return (dispatch) => {
-        debugger;
-
         DataEditingAPI.AddFile(formData).then(response => {
-            debugger;
             dispatch(setImgDataCheckEditing(response.data));
-            debugger;
         });
     }
 }
 /*****-DEL_PICTURE-******/
 export const getDelPictureThunkAPI = (itemId, checkId, resultId) => {
     return (dispatch) => {
-        debugger;
         DelPictureApi.DelPicture(itemId, checkId, resultId).then(response => {
             dispatch(setDelPicture(response));
         });
@@ -400,7 +378,6 @@ export const getDelPictureThunkAPI = (itemId, checkId, resultId) => {
 
 const FunctionGetCoefficientsPerSection = (checkId, dispatch) => {
     DataEditingAPI.GetCoefficients(checkId).then(response => {
-        debugger;
         dispatch(setGetCoefficient(response));
     });
 }
@@ -418,7 +395,6 @@ export const getCoefficientThunkEditingAPI = (selectedValue, itemId, checkId) =>
 
 export const GetCoefficients = (checkId) => {
     return (dispatch) => {
-        debugger;
         FunctionGetCoefficientsPerSection(checkId, dispatch);
     }
 }

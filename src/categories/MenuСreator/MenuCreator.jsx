@@ -60,8 +60,11 @@ const MenuCreator = (props) => {
                         }else if(item.id === '2'){
                             //props.navigation.navigate((item.id==2)?"Посмотреть историю проверок":"", {parent_id_: props.route.params.name.id})
                             //console.log(2);
+                            debugger;
                             props.navigation.navigate((item.id==2) ? "Посмотреть историю проверок" : "", {
-                                parent_id_: props.route.params.name.id
+                                parent_id_: props.route.params.name.id,
+                                Page: 1,
+                                pageSize: 15
                             })
                         }
                     }
